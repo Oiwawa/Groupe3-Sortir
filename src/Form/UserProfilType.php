@@ -20,8 +20,8 @@ class UserProfilType extends AbstractType
             ->add('mail', null,['label'=>'Email: '])
             ->add('password',null,['label'=>'Mot de passe: '])
             ->add('password',null,['label'=>'Confirmation: '])
-            ->add('campus',ChoiceType::class, ['choices' =>['Saint-Herblain'=>'Saint-Herblain',
-                'Nantes'=>'Nantes', 'La-Roche-sur-Yon'=>'La-Roche-sur-Yon']])
+//            ->add('campus',ChoiceType::class, ['choices' =>['Saint-Herblain'=>'Saint-Herblain',
+//                'Nantes'=>'Nantes', 'La-Roche-sur-Yon'=>'La-Roche-sur-Yon']])
 //            ->add('Ma photo')
         ;
     }

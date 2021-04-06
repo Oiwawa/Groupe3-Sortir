@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title%}Sortir - ENI - Profil {% endblock %}
+{% block title %}Sortir - ENI - Profil {% endblock %}
 
     {% block header %}
         <ul class="nav nav-pills">
@@ -24,6 +24,23 @@
 
     {% endblock %}
 {% block body %}
-<h1>Mon profil</h1>
+    {% form_theme userProfilForm 'bootstrap_4_layout.html.twig' %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="my-5 d-flex justify-content-center">
+                <h1>Mon profil</h1>
+            </div>
+            <div class="my-5 d-flex justify-content-center">
+                <div>
+                    {{ form_start(userProfilForm) }}
+                    {{ form_widget(userProfilForm) }}
+                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <button type="reset" class="btn btn-secondary">Annuler</button>
+                    {{ form_end(userProfilForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
