@@ -16,7 +16,7 @@ class HomeController extends AbstractController
 {
 
     /**
-     * @Route(path="", name="index", methods={"GET"}
+     * @Route(path="", name="index", methods={"GET"})
      */
     public function index(){
 
