@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<h1>Sortir.com</h1>
+    <ul class="nav nav-pills">
+{#    TODO Afficher accueil et ville si un admin est connecté#}
+{#    <ul class="nav nav-pills">#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link active" href="#">Villes</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="#">Campus</a>#}
+{#        </li>#}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('home_index') }}">Accueil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('user_profil') }}">Mon profil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Se déconnecter</a>
+        </li>
+    </ul>
+{% endblock %}
