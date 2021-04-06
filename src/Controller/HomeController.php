@@ -24,11 +24,11 @@ class HomeController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function index(Request $request, EntityManagerInterface $entityManager){
-        if(!is_null($this->getUser())){
+       // if(!is_null($this->getUser())){
 
-        return $this->render('home/index.html.twig');
-        }
-        return $this->redirectToRoute('app_login');
+       return $this->render('home/index.html.twig');
+       // }
+      //  return $this->redirectToRoute('app_login');
     }
 
 }

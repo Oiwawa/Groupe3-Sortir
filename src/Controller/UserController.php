@@ -22,10 +22,10 @@ class UserController extends AbstractController
      */
     public function profil(Request $request, EntityManagerInterface $entityManager){
         //Récupère le paramètre indiqué dans l'URL
-        $usernames = $entityManager->getRepository('App:User')->find($request->get('username'));
+
 
         //TODO formulaire de modification du profil
-        return $this->render('user/profil.html.twig', ['usernames', $usernames]);
+     return $this->render('user/profil.html.twig');
     }
 
 }
