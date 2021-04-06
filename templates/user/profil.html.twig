@@ -1,20 +1,24 @@
 {% extends "base.html.twig" %}
-{% block title %}Sortir - ENI - Accueil{% endblock %}
+
+{% block title%}Sortir - ENI - Profil {% endblock %}
+
     {% block header %}
         <ul class="nav nav-pills">
             {# TODO Afficher accueil et ville si un admin est connecté #}
-             <li class="nav-item">
-             <a class="nav-link" href="#">Villes</a>
-             </li>
-             <li class="nav-item">
-             <a class="nav-link" href="#">Campus</a>
-             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Villes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Campus</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('home_index') }}">Accueil</a>
             </li>
+            {% for username in username %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('user_profil',{"username":app.user.username}) }}">Mon profil</a>
+                    <a class="nav-link" href="{# {{ url('user_profil',{"username":user.username}) }} #}#">Mon profil</a>
                 </li>
+            {% endfor %}
             <li class="nav-item">
                 <a class="nav-link" href="{{ url('app_logout') }}">Se déconnecter</a>
             </li>
@@ -22,5 +26,6 @@
 
     {% endblock %}
 {% block body %}
-{% endblock %}
+<h1>Mon profil</h1>
 
+{% endblock %}
