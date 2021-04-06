@@ -22,7 +22,7 @@ security:
                     - App\Security\AppAuthenticator
             logout:
                 path: app_logout
-                target: home_login
+                target: app_login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
