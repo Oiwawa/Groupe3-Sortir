@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -26,11 +28,8 @@ class UserProfilType extends AbstractType
                 'first_options' =>['label'=>'Mot de passe: '],
                 'second_options' =>['label' =>'Confirmation: '],
                 'invalid_message' =>'Les champs de mots de passe doivent correspondre'])
+            ->add('campus', EntityType::class,['class'=>Campus::class, 'choice_label'=>'name'])
 
-
-//            ->add('campus',ChoiceType::class, ['choices' =>['Saint-Herblain'=>'Saint-Herblain',
-//                'Nantes'=>'Nantes', 'La-Roche-sur-Yon'=>'La-Roche-sur-Yon']])
-//            ->add('Ma photo')
         ;
     }
 
