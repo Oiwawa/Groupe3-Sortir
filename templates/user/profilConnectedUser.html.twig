@@ -1,0 +1,67 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Sortir - ENI - Profil {% endblock %}
+
+   {% block header %}
+       <div class="container-fluid">
+           <div class="row">
+               <div class="my-5 d-flex col-md-4">
+                   <h1>Sortir - ENI</h1>
+               </div>
+               <div class="col-md-4 offset-md-4">
+                   <ul class="nav nav-pills">
+                       {% if app.user.admin == true %}
+                       <li class="nav-item">
+                           <a class="nav-link" href="{{ url('admin_villes') }}">Villes</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="{{ url('admin_campus') }}">Campus</a>
+                       </li>
+                       {% endif %}
+                       <li class="nav-item">
+                           <a class="nav-link" href="{{ url('home_index') }}">Accueil</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="{{ url('user_profil',{"username":app.user.username}) }}">Mon
+                               profil</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="{{ url('app_logout') }}">Se déconnecter</a>
+                       </li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+   {% endblock %}
+{% block body %}
+    {% form_theme userProfilForm 'bootstrap_4_layout.html.twig' %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="my-5 d-flex justify-content-center">
+                <h1>Mon profil</h1>
+            </div>
+            {% for status, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                        <strong>
+                            {{ message }}
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="my-5 d-flex justify-content-center">
+                <div>
+                    {{ form_start(userProfilForm) }}
+                    {{ form_widget(userProfilForm) }}
+                    <button type="submit" class="btn btn-primary">Modifier</button>
+                    <button type="reset" class="btn btn-secondary">Annuler</button>
+                    <br>
+                    {{ form_end(userProfilForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

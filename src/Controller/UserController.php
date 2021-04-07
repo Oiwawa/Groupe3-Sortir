@@ -19,23 +19,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route(path="{username}", name="profil")
      */
     public function profil(Request $request, EntityManagerInterface $entityManager)
     {
-
+        //Si utilisateur connecté souhaite accéder à son profil
+        if($request->get('username') === $this->getUser()->getUsername()){
         $form = $this->createForm(UserProfilType::class, $this->getUser());
-
-
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-
-            $entityManager->persist();
             $entityManager->flush();
-
             $this->addFlash('success', 'Votre profil a été modifié avec succès!');
         }
-        return $this->render('user/profil.html.twig', ['userProfilForm'=>$form->createView()]);
+        return $this->render('user/profilConnectedUser.html.twig', ['userProfilForm'=>$form->createView()]);
+        }
+        //Si l'user souhaite accéder au profil d'un autre utilisateur:
+
+        $userName = $request->get('username');
+        $user = $entityManager->getRepository('App:User')->find($request->get('username'));
+
+        return $this->render('user/profil.html.twig');
     }
 }
