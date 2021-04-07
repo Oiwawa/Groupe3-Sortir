@@ -24,15 +24,18 @@ class UserController extends AbstractController
      */
     public function profil(Request $request, EntityManagerInterface $entityManager)
     {
-        //Récupère le paramètre indiqué dans l'URL
-        $user = new User();
-        $form = $this->createForm(UserProfilType::class, $user);
+
+        $form = $this->createForm(UserProfilType::class, $this->getUser());
+
+
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-            $entityManager->persist($user);
+
+            $entityManager->persist();
             $entityManager->flush();
+
+            $this->addFlash('success', 'Votre profil a été modifié avec succès!');
         }
         return $this->render('user/profil.html.twig', ['userProfilForm'=>$form->createView()]);
     }
-
 }
