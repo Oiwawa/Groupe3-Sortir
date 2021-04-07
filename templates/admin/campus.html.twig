@@ -36,7 +36,23 @@
 
 
 {% block body %}
-
+    {% form_theme campusform 'bootstrap_4_layout.html.twig' %}
+    <div class="container-fluid">
+        <div class="row mt-3">
+            <div class="my-5 d-flex justify-content-center">
+                <h3>gérer campus</h3>
+            </div>
+            <hr>
+            <div class="my-5 d-flex justify-content-center">
+                {{ form_start(campusform) }}
+                {{ form_widget(campusform) }}
+                <button type="submit" class="btn btn-primary">modifier</button>
+                <button type="reset" class="btn btn-secondary">supprimer</button>
+                <br>
+                {{ form_end(campusform) }}
+            </div>
+        </div>
+    </div>
 
 
 {% endblock %}

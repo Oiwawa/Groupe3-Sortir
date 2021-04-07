@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -22,6 +23,7 @@ class UserRegisterType extends AbstractType
             ->add('lastName', TextType::class, ['label' => 'Nom: '])
             ->add('phone', TextType::class, ['label' => 'Téléphone: '])
             ->add('mail', TextType::class, ['label' => 'Email: '])
+            ->add('campus',EntityType::class,['class'=>Campus::class,'choice_label'=>'name'])
             ->add('admin', TextType::class, ['label' => 'Administrateur: '])
             ->add('password', PasswordType::class, ['label' => 'Mot de passe:',
                 'mapped' => false,
