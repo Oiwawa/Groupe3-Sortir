@@ -38,7 +38,6 @@ class UserController extends AbstractController
         }
         //Si l'user souhaite accéder au profil d'un autre utilisateur:
 
-        $userName = $request->get('username');
         $user = new User();
         $user = $entityManager->getRepository('App:User')->findOneBy(['username' => $request->get('username')]);
 
