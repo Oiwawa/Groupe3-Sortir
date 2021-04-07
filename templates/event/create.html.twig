@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Sortir - ENI - Event
+{% endblock %}
+
+{% block header %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="my-5 d-flex col-md-4">
+                <h1>Sortir - ENI</h1>
+            </div>
+            <div class="col-md-4 offset-md-4">
+                <ul class="nav nav-pills">
+                    {% if app.user.admin == true %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('admin_villes') }}">Villes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('admin_campus') }}">Campus</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('home_index') }}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('user_profil',{"username":app.user.username}) }}">Mon
+                            profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('app_logout') }}">Se déconnecter</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {% form_theme eventCreateForm 'bootstrap_4_layout.html.twig' %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="my-5 d-flex justify-content-center">
+                <h1>Créer un événement</h1>
+            </div>
+            <div class="my-5 d-flex justify-content-center">
+                {{ form_start(eventCreateForm) }}
+                {{ form_widget(eventCreateForm) }}
+                {{ form_row(eventCreateForm.place) }}
+                <button type="button" class="btn" data-toggle="modal" data-target="#formModal">
+                    <img alt="icon add new books" src="{{ asset('img/addButton.png') }}">
+                </button>
+                {{ form_end(eventCreateForm) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\CampusRepository;
+use App\Repository\LieuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=CampusRepository::class)
+ * @ORM\Entity(repositoryClass=LieuRepository::class)
  */
-class Campus
+class Place
 {
     /**
      * @ORM\Id
@@ -25,18 +25,22 @@ class Campus
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="campus")
+     * @ORM\Column(type="string", length=255)
      */
-    private $Users;
+    private $street;
 
     /**
-     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="campus")
+     * @ORM\Column(type="string", length=255)
+     */
+    private $zipCode;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Event::class, mappedBy="place")
      */
     private $events;
 
     public function __construct()
     {
-        $this->Users = new ArrayCollection();
         $this->events = new ArrayCollection();
     }
 
@@ -57,32 +61,26 @@ class Campus
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getUsers(): Collection
+    public function getStreet(): ?string
     {
-        return $this->Users;
+        return $this->street;
     }
 
-    public function addUser(User $user): self
+    public function setStreet(string $street): self
     {
-        if (!$this->Users->contains($user)) {
-            $this->Users[] = $user;
-            $user->setCampus($this);
-        }
+        $this->street = $street;
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function getZipCode(): ?string
     {
-        if ($this->Users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
-            if ($user->getCampus() === $this) {
-                $user->setCampus(null);
-            }
-        }
+        return $this->zipCode;
+    }
+
+    public function setZipCode(string $zipCode): self
+    {
+        $this->zipCode = $zipCode;
 
         return $this;
     }
@@ -99,7 +97,7 @@ class Campus
     {
         if (!$this->events->contains($event)) {
             $this->events[] = $event;
-            $event->setCampus($this);
+            $event->setPlace($this);
         }
 
         return $this;
@@ -109,8 +107,8 @@ class Campus
     {
         if ($this->events->removeElement($event)) {
             // set the owning side to null (unless already changed)
-            if ($event->getCampus() === $this) {
-                $event->setCampus(null);
+            if ($event->getPlace() === $this) {
+                $event->setPlace(null);
             }
         }
 

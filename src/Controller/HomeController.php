@@ -17,19 +17,21 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class HomeController extends AbstractController
 {
-
     /**
      * @Route(path="", name="index", methods={"GET"})
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @return Response
      */
-    public function index(Request $request, EntityManagerInterface $entityManager){
-        if(!is_null($this->getUser())){
-
-       return $this->render('home/index.html.twig');
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        //Si un user est connecté  = renvoi a l'index
+        if (!is_null($this->getUser())) {
+            return $this->render('home/index.html.twig');
         }
+        //Si non, renvoi vers la page de connexion
         return $this->redirectToRoute('app_login');
     }
+
 
 }

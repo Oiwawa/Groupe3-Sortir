@@ -90,7 +90,7 @@ class AdminController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'utilisateur ajouté!');
         }
-        return $this->render('admin/userregister.html.twig', ['userRegisterForm'=>$form->createView()]);
+        return $this->render('admin/userRegister.html.twig', ['userRegisterForm'=>$form->createView()]);
     }
 
 }
