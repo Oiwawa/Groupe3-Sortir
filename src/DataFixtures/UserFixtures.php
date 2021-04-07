@@ -43,7 +43,7 @@ class UserFixtures extends Fixture
         $user->setMail($faker->email);
         $user->setRoles(['ROLE_ADMIN']);
         $user->setAdmin(1);
-        $user->setPassword($this->encoder->encodePassword($user, '123456'));
+        $user->setPassword($this->encoder->encodePassword($user, 'admin'));
         $user->setCampus($faker->randomElement($campuss));
 
         $manager->persist($user);

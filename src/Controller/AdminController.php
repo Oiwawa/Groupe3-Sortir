@@ -27,8 +27,12 @@ class AdminController extends AbstractController
 {
     /**
      * @Route(path="campus", name="campus", methods={"GET"})
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
      */
-    public function campus(EntityManagerInterface $entityManager , Request $request){
+    public function campus(EntityManagerInterface $entityManager , Request $request): Response
+    {
         $campus = new campus();
 
         $form = $this->createForm(CampusType::class, $campus);
@@ -46,9 +50,12 @@ class AdminController extends AbstractController
 
     /**
      * @Route(path="villes", name="villes", methods={"GET"})
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
      */
-
-    public function city(EntityManagerInterface $entityManager, Request $request){
+    public function city(EntityManagerInterface $entityManager, Request $request): Response
+    {
         $ville = new ville();
 
         $form = $this->createForm(VilleType::class, $ville);
