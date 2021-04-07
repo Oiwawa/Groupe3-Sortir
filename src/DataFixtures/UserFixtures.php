@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Campus;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -11,14 +12,29 @@ class UserFixtures extends Fixture
 {
 
     private $encoder;
-    public function __construct(UserPasswordEncoderInterface $encoder){
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
         $this->encoder = $encoder;
     }
+
     public function load(ObjectManager $manager)
     {
         $faker = \Faker\Factory::create("fr_FR");
 
-        //Créer toujours un admin
+        //Création de 4 campus
+        for ($i = 0; $i < 5; $i++) {
+            $campus = new Campus();
+            $campus->setName($faker->city);
+            $manager->persist($campus);
+
+        }
+        $manager->flush();
+
+        //Récupération des campus
+        $campuss = $manager->getRepository(Campus::class)->findAll();
+
+        //Création d'au moins une entité admin
         $user = new User();
         $user->setUsername('admin');
         $user->setFirstName('admin');
@@ -28,20 +44,25 @@ class UserFixtures extends Fixture
         $user->setRoles(['ROLE_ADMIN']);
         $user->setAdmin(1);
         $user->setPassword($this->encoder->encodePassword($user, '123456'));
+        $user->setCampus($faker->randomElement($campuss));
+
+        $manager->persist($user);
 
         //Créer des utilisateurs random
-         for($i = 0 ; $i < 10; $i++){
-         $user = new User();
-             $user->setUsername($faker->userName);
-             $user->setFirstName($faker->firstName);
-             $user->setLastName($faker->lastName);
-             $user->setPhone($faker->phoneNumber);
-             $user->setMail($faker->email);
-             $user->setRoles(['ROLE_USER']);
-             $user->setAdmin(0);
-             $user->setPassword($this->encoder->encodePassword($user, '123456'));
-         $manager->persist($user);
-         }
+        for ($i = 0; $i < 10; $i++) {
+            $user = new User();
+            $user->setUsername($faker->userName);
+            $user->setFirstName($faker->firstName);
+            $user->setLastName($faker->lastName);
+            $user->setPhone($faker->phoneNumber);
+            $user->setMail($faker->email);
+            $user->setRoles(['ROLE_USER']);
+            $user->setAdmin(0);
+            $user->setPassword($this->encoder->encodePassword($user, '123456'));
+            $user->setCampus($faker->randomElement($campuss));
+
+            $manager->persist($user);
+        }
         $manager->flush();
     }
 }
