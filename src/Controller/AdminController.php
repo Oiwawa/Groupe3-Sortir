@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class AdminController
@@ -43,10 +44,11 @@ class AdminController extends AbstractController
     /**
      * @param EntityManagerInterface $entityManager
      * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route(path="userRegister", name="userRegister" )
      */
-    public function userRegister(EntityManagerInterface $entityManager, Request $request){
+    public function userRegister(EntityManagerInterface $entityManager, Request $request, UserPasswordEncoderInterface $passwordEncoder){
        $user = new User();
 
        $form = $this->createForm(UserRegisterType::class, $user);
@@ -55,6 +57,13 @@ class AdminController extends AbstractController
             if($user->getAdmin()== true){
                 $user->setRoles((array)'ROLE_ADMIN');
             }
+
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'utilisateur ajouté!');
