@@ -4,6 +4,9 @@
 namespace App\Controller;
 
 
+use App\Entity\User;
+use App\Form\UserProfilType;
+use App\Form\UserRegisterType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +38,28 @@ class AdminController extends AbstractController
 
 
         return $this->render('admin/city.html.twig');
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route(path="userRegister", name="userRegister" )
+     */
+    public function userRegister(EntityManagerInterface $entityManager, Request $request){
+       $user = new User();
+
+       $form = $this->createForm(UserRegisterType::class, $user);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            if($user->getAdmin()== true){
+                $user->setRoles((array)'ROLE_ADMIN');
+            }
+            $entityManager->persist($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'utilisateur ajouté!');
+        }
+        return $this->render('admin/userregister.html.twig', ['userRegisterForm'=>$form->createView()]);
     }
 
 
