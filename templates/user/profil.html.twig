@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-
+    Sortir - ENI - {{ user.username|capitalize }}
 {% endblock %}
    {% block header %}
        <div class="container-fluid">
@@ -37,15 +37,22 @@
     <div class="container-fluid">
         <div class="row">
             <div class="my-5 d-flex justify-content-center">
-                <h1>{{ user.username }}</h1>
+                <h1>{{ user.username|capitalize }}</h1>
             </div>
-            <div class="my-5 d-flex justify-content-center">
-            <p>Prénom : {{ user.firstName }}</p>
-            <p>Nom : {{ user.lastName }}</p>
-            <p>Téléphone : {{ user.phone }}</p>
-            <p>Email : {{ user.mail }}</p>
-{#            <p>Campus : {{ user.campus }}</p>#}
+            <div class="my-1 d-flex justify-content-center">
+                <p>Prénom : {{ user.firstName|capitalize }}</p>
             </div>
+            <div class="my-1 d-flex justify-content-center">
+                <p>Nom : {{ user.lastName|capitalize }}</p>
+            </div>
+
+            <div class="my-1 d-flex justify-content-center">
+                <p>Téléphone : {{ user.phone }}</p>
+            </div>
+            <div class="my-1 d-flex justify-content-center">
+                <p>Email : {{ user.mail }}</p>
+            </div>
+            {# <p>Campus : {{ user.campus }}</p> #}
         </div>
     </div>
 {% endblock %}

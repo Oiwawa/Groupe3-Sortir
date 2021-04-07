@@ -57,7 +57,6 @@ class AdminController extends AbstractController
             if($user->getAdmin()== true){
                 $user->setRoles((array)'ROLE_ADMIN');
             }
-
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
