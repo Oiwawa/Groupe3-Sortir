@@ -1,2 +1,39 @@
 {% extends "base.html.twig" %}
 
+{% block title  %}Sortir - ENi - Campus  {% endblock %}
+
+
+{% block body %}
+
+    {% for status, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                <strong>
+                    {{ message }}
+                </strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+ {% form_theme campusForm 'bootstrap_4_layout.html.twig' %}
+<div class="container-fluid">
+    <div class="row mt-3">
+        <div class="my-5 d-flex justify-content-center">
+            <h3>Gérer les campus</h3>
+        </div>
+        <hr>
+        <div class="my-2 d-flex justify-content-center">
+            {% for villes in villelist%}
+                {{ ville.name}}
+                {{ form_start(VilleForm) }}
+                {{ form_widget(VilleForm) }}
+
+                <button type="submit" class="btn btn-primary"><a href="{{url('admin_modifierville',{"id":ville.id})}}">%Modifier</a></button>
+                <button type="reset" class="btn btn-secondary"><a href="{{ url('admin_deletecity',{"id":ville.id}) }}">Supprimé</a></button>
+                <br>
+                {{ form_end(villeForm) }}
+            {% endfor %}
+        </div>
+    </div>
+</div>

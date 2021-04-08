@@ -28,7 +28,7 @@ class AdminController extends AbstractController
 {
     //créer un campus
     /**
-     * @Route(path="campus", name="campus", methods={"GET"})
+     * @Route(path="campus", name="campus")
      * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @return Response
@@ -46,52 +46,72 @@ class AdminController extends AbstractController
             $entityManager->persist($campus);
             $entityManager->flush();
         }
-
         return $this->render('admin/campus.html.twig',['campusForm' => $form->createView(),'campuslist'=> $campuslist]);
     }
 
 
-
-    // supprime un campus
+     // modifier le nom d un campus
     /**
+     * @Route(Path="campusmodifier" , name="campusmodifier")
      * @param EntityManagerInterface $em
      * @param Request $request
-     * @param int $id
+     * @param $id
      * @return RedirectResponse
-     * @Route(Path="campusDelete/{id}" , name="campusDelete")
      */
-    public function deletecampus(EntityManagerInterface $em ,Request $request, $id): RedirectResponse
+    public function modifiercampus(EntityManagerInterface $em , Request $request , $id)
     {
+        $em->remove($campus = $em->getRepository(Campus::class)->find($id));
 
-       // $em=$this->getDoctrine()->getManager();
-        //$CampusRepository= $this->getDoctrine()->getRepository(CampusType::class);
-       //$campus = $CampusRepository->find($id);
-       // $campus = new Campus();
-       // $campus = $em->getRepository(Campus::class)->find($id);
+        if ($campus->isSubmitted() && $campus->isValid()) {
+            $em->flush();
+            $this->addFlash('success', 'le campus a bien été modifié !');
 
-        //if($campus = null){
-           // throw $this->createNotFoundException('Site inconnu ou deja supprimé');
-        //}
-
-        $em ->remove($campus = $em->getRepository(Campus::class)->find($id));
-        $em->flush();
-        $this->addFlash('success', 'le campus a bien été supprimé !');
-
-        return $this->redirectToRoute('admin_campus');
+            return $this->redirectToRoute('admin_campus');
+        }
     }
 
-    // Ajouter une ville
 
+        // supprime un campus
+        /**
+         * @param EntityManagerInterface $em
+         * @param Request $request
+         * @param int $id
+         * @return RedirectResponse
+         * @Route(Path="campusDelete/{id}" , name="campusDelete")
+         */
+        public
+        function deletecampus(EntityManagerInterface $em, Request $request, $id): RedirectResponse
+        {
+
+            // $em=$this->getDoctrine()->getManager();
+            //$CampusRepository= $this->getDoctrine()->getRepository(CampusType::class);
+            //$campus = $CampusRepository->find($id);
+            // $campus = new Campus();
+            // $campus = $em->getRepository(Campus::class)->find($id);
+
+            //if($campus = null){
+            // throw $this->createNotFoundException('Site inconnu ou deja supprimé');
+            //}
+
+            $em->remove($campus = $em->getRepository(Campus::class)->find($id));
+            $em->flush();
+            $this->addFlash('success', 'le campus a bien été supprimé !');
+
+            return $this->redirectToRoute('admin_campus');
+        }
+
+
+    // Ajouter une ville
     /**
      * @Route(path="villes", name="villes", methods={"GET"})
      * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @return Response
      */
-    public function city(EntityManagerInterface $entityManager, Request $request): Response
+    public function city(EntityManagerInterface $entityManager, Request $request)
     {
         $ville = new ville();
-
+        $villeliste = $entityManager->getRepository(Ville::class)->findAll();
         $form = $this->createForm(VilleType::class, $ville);
         $form->handleRequest($request);
 
@@ -101,6 +121,40 @@ class AdminController extends AbstractController
         }
         return $this->render('admin/city.html.twig');
     }
+
+    /**
+     * @Route(Path="modifierville", name="modifierville")
+     */
+    public function modifierville(EntityManagerInterface $em , Request $request, $id){
+
+        $em->remove($ville= $em->getRepository(ville::class)->find($id));
+
+        if ($ville->isSubmitted() && $ville->isValid()) {
+            $em->flush();
+            $this->addFlash('success', 'la ville a bien été modifié !');
+
+            return $this->redirectToRoute('admin_villes');
+        }
+
+    }
+
+
+     //Supprimer une ville
+    /**
+     * @param EntityManagerInterface $em
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse
+     * @Route(Path="deletecity" , name="deletecity")
+     */
+    public function deletecity(EntityManagerInterface $em , request $request, $id){
+
+        $em ->remove($ville = $em->getRepository(ville::class)->find($id));
+        $em->flush();
+        $this->addFlash('success', 'le campus a bien été supprimé !');
+
+        return $this->redirectToRoute('admin_villes');
+}
 
      //Ajouter un utilisateur
     /**

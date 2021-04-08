@@ -30,7 +30,7 @@
                  {{ campus.name}}
                 {{ form_start(campusForm) }}
                 {{ form_widget(campusForm) }}
-                <button type="submit" class="btn btn-primary">Modifier</button>
+                <button type="submit" class="btn btn-primary"><a href="{{ url('admin_campusmodifier') }}"Modifier</button>
                 <button type="reset" class="btn btn-secondary"><a href="{{ url('admin_campusDelete',{"id":campus.id}) }}">Supprimé</a></button>
                 <br>
                 {{ form_end(campusForm) }}
