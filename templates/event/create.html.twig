@@ -29,26 +29,13 @@
                 <br>
                 {{ form_rest(eventCreateForm) }}
 
-                {#                <div class="row d-flex">#}
-{#                    <div class="col-10">#}
-{#                        {{ form_row(eventCreateForm.place) }}#}
-{#                    </div>#}
 
-{#                    <button type="button" class="btn col-2 p-0" data-toggle="modal" data-target="#formModal">#}
-{#                        <img alt="icon add new books" src="{{ asset('img/addButton.png') }}">#}
-{#                    </button>#}
-{#                </div>#}
-                {{ form_start(placeForm) }}
-                {{ form_widget(placeForm) }}
             </div>
         </div>
         <div class="col-3 mx-auto text-center">
 
-                <button class="btn btn-secondary ms-5" type="button" data-dismiss="modal">Annuler
-                </button>
+                {{ form_row(eventCreateForm.register) }}
 
-                <button class="btn btn-success ms-2" type="submit">Publier la sortie</button>
-                {{ form_end(placeForm) }}
                 {{ form_end(eventCreateForm) }}
         </div>
     </div>

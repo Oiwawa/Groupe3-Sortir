@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -70,6 +72,21 @@ class Event
      * @ORM\JoinColumn(nullable=false)
      */
     private $City;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $cancelMotif;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="eventsSubbed")
+     */
+    private $subscribers;
+
+    public function __construct()
+    {
+        $this->subscribers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -192,6 +209,42 @@ class Event
     public function setCity(?Ville $City): self
     {
         $this->City = $City;
+
+        return $this;
+    }
+
+    public function getCancelMotif(): ?string
+    {
+        return $this->cancelMotif;
+    }
+
+    public function setCancelMotif(?string $cancelMotif): self
+    {
+        $this->cancelMotif = $cancelMotif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getSubscribers(): Collection
+    {
+        return $this->subscribers;
+    }
+
+    public function addSubscriber(User $subscriber): self
+    {
+        if (!$this->subscribers->contains($subscriber)) {
+            $this->subscribers[] = $subscriber;
+        }
+
+        return $this;
+    }
+
+    public function removeSubscriber(User $subscriber): self
+    {
+        $this->subscribers->removeElement($subscriber);
 
         return $this;
     }

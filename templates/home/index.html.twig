@@ -2,7 +2,23 @@
 {% block title %}Sortir - ENI - Accueil{% endblock %}
 
 {% block body %}
-
+<div class="container-fluid">
+    <div class="row">
+        <div class="my-5 d-flex justify-content-center">
+            {#                <h1>{{ event.name }}</h1>#}
+        </div>
+        {% for status, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                    <strong>
+                        {{ message }}
+                    </strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</div>
     <button class="btn btn-outline-primary">
         <a style="text-decoration: none; color: black" href="{{ url('event_create') }}">Créer un événement</a>
     </button>

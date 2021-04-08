@@ -7,10 +7,12 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Place;
 use App\Entity\User;
+use App\Form\CancelEventFormType;
 use App\Form\EventCreateType;
 use App\Form\PlaceType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,8 +35,8 @@ class EventController extends AbstractController
     {
 
         $place = new Place();
-        $formPlace = $this->createForm(PlaceType::class, $place);
-        $formPlace->handleRequest($request);
+        $placeForm = $this->createForm(PlaceType::class, $place);
+        $placeForm->handleRequest($request);
 
         $event = new Event();
         $event->setPlace($place);
@@ -45,30 +47,71 @@ class EventController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid() && $formPlace->isSubmitted() && $formPlace->isValid() ){
+        if($form->isSubmitted() && $form->isValid() && $placeForm->isSubmitted() && $placeForm->isValid() ){
 
             $entityManager->persist($place);
             $entityManager->persist($event);
             $entityManager->flush();
             $this->addFlash('success', 'Votre sortie a bien été crée');
 
-            return $this->redirectToRoute('event_detail', ['name'=>$event->getName()]);
+            $eventDetail = $entityManager->getRepository('App:Event')->findOneBy(['name' => $request->get('name')]);
+
+            return $this->redirectToRoute('event_detail', ['id'=>$event->getId(), 'event' => $eventDetail]);
         }
 
         return $this->render('event/create.html.twig',
             ['eventCreateForm'=>$form->createView(),
-            'placeForm'=>$formPlace->createView()]);
+            'placeForm'=>$placeForm->createView()]);
     }
 
     /**
      * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @return Response
-     * @Route(path="{name}", name="detail")
+     * @Route(path="{id}", name="detail")
      */
     public function detail(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $event = $entityManager->getRepository('App:Event')->findOneBy(['name' => $request->get('name')]);
-        return $this->render('event/detail.html.twig', ['event'=>$event]);
+        //Update l'event si modification
+        $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
+        $updateEventForm = $this->createForm(EventCreateType::class, $event);
+        $updateEventForm->handleRequest($request);
+        //Update le lieu si modification
+        $placeForm = $this->createForm(PlaceType::class, $event->getPlace());
+        $placeForm->handleRequest($request);
+        return $this->render('event/detail.html.twig',
+            ['updateEventForm' => $updateEventForm->createView(),
+            'placeForm' => $placeForm->createView()
+            ,'event'=>$event]);
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
+     * @Route(path="cancel/{id}", name="cancel")
+     */
+    public function cancel(EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
+
+        $cancelForm = $this->createForm(CancelEventFormType::class);
+        return $this->render('event/cancel.html.twig',
+            ['cancelForm'=>$cancelForm->createView(),
+                'event' => $event]);
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return RedirectResponse
+     * @Route(path="delete/{id}", name="delete")
+     */
+    public function delete(EntityManagerInterface $entityManager,Request $request): RedirectResponse
+    {
+        $entityManager ->remove($event = $entityManager->getRepository(Event::class)->findOneBy(['id' => $request->get('id')]));
+        $entityManager->flush();
+        $this->addFlash('success','L\'événement a bien été annulé !');
+        return $this->redirectToRoute('home_index');
     }
 }

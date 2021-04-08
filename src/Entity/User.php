@@ -72,9 +72,15 @@ class User implements UserInterface
      */
     private $events;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Event::class, mappedBy="subscribers")
+     */
+    private $eventsSubbed;
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
+        $this->eventsSubbed = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -252,6 +258,33 @@ class User implements UserInterface
             if ($event->getOrganizer() === $this) {
                 $event->setOrganizer(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEventsSubbed(): Collection
+    {
+        return $this->eventsSubbed;
+    }
+
+    public function addEventsSubbed(Event $eventsSubbed): self
+    {
+        if (!$this->eventsSubbed->contains($eventsSubbed)) {
+            $this->eventsSubbed[] = $eventsSubbed;
+            $eventsSubbed->addSubscriber($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventsSubbed(Event $eventsSubbed): self
+    {
+        if ($this->eventsSubbed->removeElement($eventsSubbed)) {
+            $eventsSubbed->removeSubscriber($this);
         }
 
         return $this;
