@@ -13,6 +13,7 @@ use App\Form\UserRegisterType;
 use App\Form\VilleType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,8 +29,12 @@ class AdminController extends AbstractController
     //créer un campus
     /**
      * @Route(path="campus", name="campus", methods={"GET"})
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
      */
-    public function campus(EntityManagerInterface $entityManager , Request $request){
+    public function campus(EntityManagerInterface $entityManager , Request $request): Response
+    {
 
         $campus = new campus();
         //recupere list des campus
@@ -52,10 +57,11 @@ class AdminController extends AbstractController
      * @param EntityManagerInterface $em
      * @param Request $request
      * @param int $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      * @Route(Path="campusDelete/{id}" , name="campusDelete")
      */
-    public function deletecampus(EntityManagerInterface $em ,Request $request, $id){
+    public function deletecampus(EntityManagerInterface $em ,Request $request, $id): RedirectResponse
+    {
 
        // $em=$this->getDoctrine()->getManager();
         //$CampusRepository= $this->getDoctrine()->getRepository(CampusType::class);
@@ -75,10 +81,15 @@ class AdminController extends AbstractController
     }
 
     // Ajouter une ville
+
     /**
      * @Route(path="villes", name="villes", methods={"GET"})
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
      */
-    public function city(EntityManagerInterface $entityManager, Request $request){
+    public function city(EntityManagerInterface $entityManager, Request $request): Response
+    {
         $ville = new ville();
 
         $form = $this->createForm(VilleType::class, $ville);

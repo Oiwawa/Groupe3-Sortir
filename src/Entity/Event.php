@@ -54,15 +54,22 @@ class Event
     private $campus;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $city;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Place::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
     private $place;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="events")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organizer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Ville::class, inversedBy="events")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $City;
 
     public function getId(): ?int
     {
@@ -153,18 +160,6 @@ class Event
         return $this;
     }
 
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(string $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
     public function getPlace(): ?Place
     {
         return $this->place;
@@ -173,6 +168,30 @@ class Event
     public function setPlace(?Place $place): self
     {
         $this->place = $place;
+
+        return $this;
+    }
+
+    public function getOrganizer(): ?User
+    {
+        return $this->organizer;
+    }
+
+    public function setOrganizer(?User $organizer): self
+    {
+        $this->organizer = $organizer;
+
+        return $this;
+    }
+
+    public function getCity(): ?Ville
+    {
+        return $this->City;
+    }
+
+    public function setCity(?Ville $City): self
+    {
+        $this->City = $City;
 
         return $this;
     }

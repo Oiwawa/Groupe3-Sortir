@@ -2,61 +2,29 @@
 {% block title %}
     Sortir - ENI - {{ user.username|capitalize }}
 {% endblock %}
-   {% block header %}
-       <div class="container-fluid">
-           <div class="row">
-               <div class="my-5 d-flex col-md-4">
-                   <h1>Sortir - ENI</h1>
-               </div>
-               <div class="col-md-4 offset-md-4">
-                   <ul class="nav nav-pills">
-                       {% if app.user.admin == true %}
-                           <li class="nav-item">
-                               <a class="nav-link" href="{{ url('admin_villes') }}">Villes</a>
-                           </li>
-                           <li class="nav-item">
-                               <a class="nav-link" href="{{ url('admin_campus') }}">Campus</a>
-                           </li>
-                       {% endif %}
-                       <li class="nav-item">
-                           <a class="nav-link" href="{{ url('home_index') }}">Accueil</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="{{ url('user_profil',{"username":app.user.username}) }}">Mon
-                               profil</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="{{ url('app_logout') }}">Se déconnecter</a>
-                       </li>
-                   </ul>
-               </div>
-           </div>
-       </div>
-   {% endblock %}
+
 {% block body %}
     <div class="container-fluid">
         <div class="row">
-            <div class="my-5 d-flex justify-content-center">
+            <div class="col-6 mx-auto text-center">
                 <h1>{{ user.username|capitalize }}</h1>
-            </div>
-            <div class="my-1 d-flex justify-content-center">
-                <p>Prénom : {{ user.firstName|capitalize }}</p>
-            </div>
-            <div class="my-1 d-flex justify-content-center">
-                <p>Nom : {{ user.lastName|capitalize }}</p>
-            </div>
-
-            <div class="my-1 d-flex justify-content-center">
-                <p>Téléphone : {{ user.phone }}</p>
-            </div>
-            <div class="my-1 d-flex justify-content-center">
-                <p>Email : {{ user.mail }}</p>
-            </div>
-            <div class="my-1 d-flex justify-content-center">
-                <p>Campus : {{ user.campus.name }}</p>
+                <div class="my-1">
+                    <p>Prénom : {{ user.firstName|capitalize }}</p>
+                </div>
+                <div class="my-1">
+                    <p>Nom : {{ user.lastName|capitalize }}</p>
+                </div>
+                <div class="my-1">
+                    <p>Téléphone : {{ user.phone }}</p>
+                </div>
+                <div class="my-1">
+                    <p>Email : {{ user.mail }}</p>
+                </div>
+                <div class="my-1">
+                    <p>Campus : {{ user.campus.name }}</p>
+                </div>
             </div>
         </div>
     </div>
 {% endblock %}
-
 
