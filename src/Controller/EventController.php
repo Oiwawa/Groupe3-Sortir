@@ -12,6 +12,7 @@ use App\Form\EventCreateType;
 use App\Form\PlaceType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,19 +36,22 @@ class EventController extends AbstractController
     {
 
         $place = new Place();
-        $placeForm = $this->createForm(PlaceType::class, $place);
-        $placeForm->handleRequest($request);
 
         $event = new Event();
         $event->setPlace($place);
         $organizer = $entityManager->getRepository('App:User')->findOneBy(['username' => $this->getUser()->getUsername()]);
         $event->setOrganizer($organizer);
-
         $form = $this->createForm(EventCreateType::class, $event);
-
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid() && $placeForm->isSubmitted() && $placeForm->isValid() ){
+        if ($form->get('register')->isClicked()) {
+            $event->setState($state = $entityManager->getRepository('App:EventState')->find(1));
+        } elseif ($form->get('publish')->isClicked()) {
+            $event->setState($state = $entityManager->getRepository('App:EventState')->find(2));
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
 
             $entityManager->persist($place);
             $entityManager->persist($event);
@@ -56,12 +60,12 @@ class EventController extends AbstractController
 
             $eventDetail = $entityManager->getRepository('App:Event')->findOneBy(['name' => $request->get('name')]);
 
-            return $this->redirectToRoute('event_detail', ['id'=>$event->getId(), 'event' => $eventDetail]);
+            return $this->redirectToRoute('event_detail', ['id' => $event->getId(), 'event' => $eventDetail]);
         }
-
+        $this->addFlash('error', 'Une erreur est survenue.');
         return $this->render('event/create.html.twig',
-            ['eventCreateForm'=>$form->createView(),
-            'placeForm'=>$placeForm->createView()]);
+            ['eventCreateForm' => $form->createView(),
+                ]);
     }
 
     /**
@@ -72,17 +76,29 @@ class EventController extends AbstractController
      */
     public function detail(EntityManagerInterface $entityManager, Request $request): Response
     {
-        //Update l'event si modification
+        //Récupère l'id de l'event pour l'affichage
         $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
-        $updateEventForm = $this->createForm(EventCreateType::class, $event);
-        $updateEventForm->handleRequest($request);
-        //Update le lieu si modification
-        $placeForm = $this->createForm(PlaceType::class, $event->getPlace());
-        $placeForm->handleRequest($request);
-        return $this->render('event/detail.html.twig',
-            ['updateEventForm' => $updateEventForm->createView(),
-            'placeForm' => $placeForm->createView()
-            ,'event'=>$event]);
+        //Si l'utilisateur est aussi l'organisateur -> affichage du formulaire pour modification
+
+        if ($this->getUser() === $event->getOrganizer()) {
+
+            //Update l'event si modification
+            $updateEventForm = $this->createForm(EventCreateType::class, $event);
+            $updateEventForm->handleRequest($request);
+
+            //Update le lieu si modification
+            if ($updateEventForm->get('register')->isClicked()) {
+                $event->setState($state = $entityManager->getRepository('App:EventState')->find(1));
+            } elseif ($updateEventForm->get('publish')->isClicked()) {
+                $event->setState($state = $entityManager->getRepository('App:EventState')->find(2));
+            }
+            return $this->render('event/editEvent.html.twig',
+                ['updateEventForm' => $updateEventForm->createView()
+                    , 'event' => $event]);
+        }
+
+        //Renvoie vers une page de détail sans modification possible
+        return $this->render('event/detailEvent.html.twig', ['event' => $event]);
     }
 
     /**
@@ -97,7 +113,7 @@ class EventController extends AbstractController
 
         $cancelForm = $this->createForm(CancelEventFormType::class);
         return $this->render('event/cancel.html.twig',
-            ['cancelForm'=>$cancelForm->createView(),
+            ['cancelForm' => $cancelForm->createView(),
                 'event' => $event]);
     }
 
@@ -107,11 +123,11 @@ class EventController extends AbstractController
      * @return RedirectResponse
      * @Route(path="delete/{id}", name="delete")
      */
-    public function delete(EntityManagerInterface $entityManager,Request $request): RedirectResponse
+    public function delete(EntityManagerInterface $entityManager, Request $request): RedirectResponse
     {
-        $entityManager ->remove($event = $entityManager->getRepository(Event::class)->findOneBy(['id' => $request->get('id')]));
+        $entityManager->remove($event = $entityManager->getRepository(Event::class)->findOneBy(['id' => $request->get('id')]));
         $entityManager->flush();
-        $this->addFlash('success','L\'événement a bien été annulé !');
+        $this->addFlash('success', 'L\'événement a bien été annulé !');
         return $this->redirectToRoute('home_index');
     }
 }

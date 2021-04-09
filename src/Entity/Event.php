@@ -6,6 +6,7 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
@@ -56,6 +57,7 @@ class Event
     private $campus;
 
     /**
+     * @Assert\Valid()
      * @ORM\ManyToOne(targetEntity=Place::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -82,6 +84,12 @@ class Event
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="eventsSubbed")
      */
     private $subscribers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=EventState::class, inversedBy="events")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $state;
 
     public function __construct()
     {
@@ -245,6 +253,18 @@ class Event
     public function removeSubscriber(User $subscriber): self
     {
         $this->subscribers->removeElement($subscriber);
+
+        return $this;
+    }
+
+    public function getState(): ?EventState
+    {
+        return $this->state;
+    }
+
+    public function setState(?EventState $state): self
+    {
+        $this->state = $state;
 
         return $this;
     }

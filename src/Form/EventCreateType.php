@@ -31,10 +31,9 @@ class EventCreateType extends AbstractType
             ->add('campus', EntityType::class,['class'=>Campus::class, 'choice_label'=>'name'])
             ->add('city', EntityType::class, ['class'=>Ville::class, 'choice_label'=>'name'])
             ->add('place', PlaceType::class, ['label' => ' '])
-            ->add('register', SubmitType::class, ['label' => 'Enregistrer'])
-            ->add('publish', SubmitType::class, ['label' => 'Publier la sortie'])
+            ->add('register', SubmitType::class, ['attr'=>['value'=>1],'label' => 'Enregistrer'])
+            ->add('publish', SubmitType::class, ['attr'=>['value'=>2],'label' => 'Publier la sortie'])
             ->add('cancel', ResetType::class, ['label' => 'Annuler'])
-           // ->add('place', EntityType::class, ['class'=>Place::class, 'choice_label'=>'name'])
 
         ;
     }
