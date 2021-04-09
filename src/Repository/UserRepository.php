@@ -36,6 +36,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+
+
     // /**
     //  * @return UserFixtures[] Returns an array of UserFixtures objects
     //  */

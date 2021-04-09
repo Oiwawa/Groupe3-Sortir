@@ -19,6 +19,12 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function allParticipant($id){
+        $query = $this->createQueryBuilder('event')
+            ->join('event.subscribers', 'user');
+        return $participants = $query->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Event[] Returns an array of Event objects
     //  */
@@ -47,4 +53,6 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
 }

@@ -7,7 +7,6 @@
 {% block body %}
     <div class="container-fluid">
         <div class="row">
-
             {% for status, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
@@ -44,14 +43,20 @@
                         {{ form_row(updateEventForm.city) }}
                         <br>
 
-                    {{ form_end(updateEventForm) }}
-                    <button class="btn btn-secondary ms-2" type="button">
-                        <a style="text-decoration: none; color: white" href="{{ url('event_cancel', {'id':event.id}) }}">Supprimer la sortie</a>
-                    </button>
+                        {{ form_end(updateEventForm) }}
+                        <button class="btn btn-secondary ms-2" type="button">
+                            <a style="text-decoration: none; color: white"
+                               href="{{ url('event_cancel', {'id':event.id}) }}">Supprimer la sortie</a>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+        <button class="btn btn-outline-dark">
+            <a  style="text-decoration: none; color: mediumslateblue" href="{{ url('event_create') }}">Organiser une nouvelle sortie</a>
+        </button>
     </div>
+
 {% endblock %}
 
 

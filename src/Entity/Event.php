@@ -6,6 +6,7 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -241,7 +242,7 @@ class Event
         return $this->subscribers;
     }
 
-    public function addSubscriber(User $subscriber): self
+    public function addSubscriber(UserInterface $subscriber): self
     {
         if (!$this->subscribers->contains($subscriber)) {
             $this->subscribers[] = $subscriber;
@@ -250,7 +251,7 @@ class Event
         return $this;
     }
 
-    public function removeSubscriber(User $subscriber): self
+    public function removeSubscriber(UserInterface $subscriber): self
     {
         $this->subscribers->removeElement($subscriber);
 

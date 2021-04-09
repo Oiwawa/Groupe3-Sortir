@@ -1,34 +1,62 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-Sortir - ENI - {{ event.name|capitalize}}
+    Sortir - ENI - {{ event.name|capitalize }}
 {% endblock %}
 
 {% block body %}
 <div class="container-fluid">
     <div class="row">
-        <h1 class="row d-flex justify-content-center">Détail de : {{ event.name }}</h1>
-        <div class="row d-flex justify-content-center">
-            <div class="col-3 my-5">
-                <p>Nom de la sortie : {{ event.name }}</p>
-                <p>Date et heure de la sortie : {{ event.eventDate|date('d-m-Y') }}</p>
-                <p>Date limite d'inscription : {{ event.limitDate|date('d-m-Y') }}</p>
-                <p>Nombre de places : {{ event.nbrPlace }}</p>
-                <p>Durée : {{ event.duration }}</p>
-                <p>Durée : {{ event.description }}</p>
-            </div>
-            <div class="col-3 my-5">
-                <p>Campus :{{ event.campus.name }}</p>
-                <p>Lieu :{{ event.place.name }}</p>
-                <p>Rue :{{ event.place.street }}</p>
-                <p>Code postal :{{ event.place.zipCode }}</p>
+        {% for status, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                    <strong>
+                        {{ message }}
+                    </strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        <div class="row">
+            <h1 class="row d-flex justify-content-center">Détail de : {{ event.name }}</h1>
+            <div class="row d-flex justify-content-center">
+                <div class="col-3 my-5">
+                    <p>Nom de la sortie : {{ event.name }}</p>
+                    <p>Date et heure de la sortie
+                        : {{ event.eventDate|format_datetime('full', 'short', locale='fr') }}</p>
+                    <p>Date limite d'inscription
+                        : {{ event.limitDate|format_datetime('full', 'short', locale='fr') }}</p>
+                    <p>Nombre de places : {{ event.nbrPlace }}</p>
+                    <p>Durée : {{ event.duration|format_time(locale='fr') }}</p>
+                    <p>Description : {{ event.description }}</p>
+                </div>
+                <div class="col-3 my-5">
+                    <p>Campus :{{ event.campus.name }}</p>
+                    <p>Lieu :{{ event.place.name }}</p>
+                    <p>Rue :{{ event.place.street }}</p>
+                    <p>Code postal :{{ event.place.zipCode }}</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div>
-        <h3>Liste des participants inscrits: </h3>
+        <div>
+
+            <button class="btn btn-outline-primary">
+                <a href="{{ url('event_subscribe', {'id':event.id}) }}">S'inscrire à la sortie</a>
+            </button>
+        </div>
+        <div>
+            <h3>Liste des participants inscrits: </h3>
+            <ul>
+
+                {% for participant in participants %}
+                    <li>{{ participant.username }} | {{ participant.firstName }} {{ participant.lastName|upper }}</li>
+
+                {% endfor %}
+            </ul>
+        </div>
+
     </div>
 </div>
-{% endblock %}
+    {% endblock %}
 
