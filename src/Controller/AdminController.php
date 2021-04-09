@@ -51,14 +51,15 @@ class AdminController extends AbstractController
 
 
     // modifier le nom d un campus
+
     /**
      * @Route(Path="campusmodifier/{id}" , name="campusmodifier")
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @param $id
      * @return Response
      */
-    public function modifiercampus(EntityManagerInterface $entityManager , Request $request , $id)
+    public function modifierCampus(EntityManagerInterface $entityManager , Request $request , $id): Response
     {
         $campuslist = $entityManager->getRepository(Campus::class)->findAll();
       $campus = $entityManager->getRepository(Campus::class)->find($id);
@@ -79,15 +80,16 @@ class AdminController extends AbstractController
 
 
         // supprime un campus
-        /**
-         * @param EntityManagerInterface $em
-         * @param Request $request
-         * @param int $id
-         * @return RedirectResponse
-         * @Route(Path="campusDelete/{id}" , name="campusDelete")
-         */
+
+    /**
+     * @Route(Path="campusDelete/{id}" , name="campusDelete")
+     * @param EntityManagerInterface $em
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
+     */
         public
-        function deletecampus(EntityManagerInterface $em, Request $request, $id): RedirectResponse
+        function deleteCampus(EntityManagerInterface $em, Request $request, int $id): RedirectResponse
         {
 
             // $em=$this->getDoctrine()->getManager();
@@ -115,7 +117,7 @@ class AdminController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function city(EntityManagerInterface $entityManager, Request $request)
+    public function city(EntityManagerInterface $entityManager, Request $request): Response
     {
         $ville = new ville();
         $villeliste = $entityManager->getRepository(Ville::class)->findAll();
@@ -131,8 +133,13 @@ class AdminController extends AbstractController
 
     /**
      * @Route(Path="modifierville", name="modifierville")
+     * @param EntityManagerInterface $em
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse
      */
-    public function modifierville(EntityManagerInterface $em , Request $request, $id){
+    public function modifierVille(EntityManagerInterface $em , Request $request, $id): RedirectResponse
+    {
 
         $em->remove($ville= $em->getRepository(ville::class)->find($id));
 
@@ -148,13 +155,14 @@ class AdminController extends AbstractController
 
      //Supprimer une ville
     /**
+     * @Route(Path="deletecity" , name="deletecity")
      * @param EntityManagerInterface $em
      * @param Request $request
      * @param $id
      * @return RedirectResponse
-     * @Route(Path="deletecity" , name="deletecity")
      */
-    public function deletecity(EntityManagerInterface $em , request $request, $id){
+    public function deleteCity(EntityManagerInterface $em , request $request, $id): RedirectResponse
+    {
 
         $em ->remove($ville = $em->getRepository(ville::class)->find($id));
         $em->flush();
@@ -165,11 +173,11 @@ class AdminController extends AbstractController
 
      //Ajouter un utilisateur
     /**
+     * @Route(path="userRegister", name="userRegister" )
      * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
-     * @Route(path="userRegister", name="userRegister" )
      */
     public function userRegister(EntityManagerInterface $entityManager, Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
@@ -191,7 +199,7 @@ class AdminController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'utilisateur ajouté!');
         }
-        return $this->render('admin/userRegister.html.twig', ['userRegisterForm'=>$form->createView()]);
+        return $this->render('userRegister.html.twig', ['userRegisterForm'=>$form->createView()]);
     }
 
 

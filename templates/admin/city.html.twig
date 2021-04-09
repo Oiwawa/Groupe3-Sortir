@@ -29,7 +29,7 @@
                 {{ form_start(VilleForm) }}
                 {{ form_widget(VilleForm) }}
 
-                <button type="submit" class="btn btn-primary"><a href="{{url('admin_modifierville',{"id":ville.id})}}">%Modifier</a></button>
+                <button type="submit" class="btn btn-primary"><a href="{{url('admin_modifierville',{"id":ville.id})}}">Modifier</a></button>
                 <button type="reset" class="btn btn-secondary"><a href="{{ url('admin_deletecity',{"id":ville.id}) }}">Supprimé</a></button>
                 <br>
                 {{ form_end(villeForm) }}

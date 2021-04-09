@@ -24,7 +24,8 @@ class EventCreateType extends AbstractType
         $builder
             ->add('name', TextType::class, ['required'=>true, 'label'=> 'Nom de la sortie: '])
             ->add('limitDate', DateTimeType::class, ['required'=>true,'widget' => 'single_text', 'label'=> 'Date limite d\'inscription: '])
-            ->add('eventDate', DateTimeType::class, ['required'=>true,'widget' => 'single_text', 'label'=> 'Date et heure de la sortie: '])
+            ->add('eventDate', DateTimeType::class, ['required'=>true,'widget' => 'single_text',
+                'label'=> 'Date et heure de la sortie: '])
             ->add('nbrPlace', IntegerType::class, ['required'=>true,'label'=> 'Nombre de places: '])
             ->add('duration', TimeType::class, ['required'=>true,'widget' => 'single_text', 'label'=> 'Durée: '])
             ->add('description', TextareaType::class, ['required'=>true,'label'=> 'Description et infos: '])
