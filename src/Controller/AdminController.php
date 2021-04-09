@@ -50,24 +50,31 @@ class AdminController extends AbstractController
     }
 
 
-     // modifier le nom d un campus
+    // modifier le nom d un campus
     /**
-     * @Route(Path="campusmodifier" , name="campusmodifier")
+     * @Route(Path="campusmodifier/{id}" , name="campusmodifier")
      * @param EntityManagerInterface $em
      * @param Request $request
      * @param $id
-     * @return RedirectResponse
+     * @return Response
      */
-    public function modifiercampus(EntityManagerInterface $em , Request $request , $id)
+    public function modifiercampus(EntityManagerInterface $entityManager , Request $request , $id)
     {
-        $em->remove($campus = $em->getRepository(Campus::class)->find($id));
+        $campuslist = $entityManager->getRepository(Campus::class)->findAll();
+      $campus = $entityManager->getRepository(Campus::class)->find($id);
+      $campusForm = $this->createForm(CampusType::class, $campuslist);
+      $campusForm->handleRequest($request);
 
-        if ($campus->isSubmitted() && $campus->isValid()) {
-            $em->flush();
+        if ($campusForm->isSubmitted() && $campusForm->isValid()) {
+            $entityManager->flush();
             $this->addFlash('success', 'le campus a bien été modifié !');
 
             return $this->redirectToRoute('admin_campus');
         }
+        return $this->render("admin/campus.html.twig", [
+            'campusForm' => $campusForm->createView()
+        ,"campuslist"=>$campuslist]);
+
     }
 
 
