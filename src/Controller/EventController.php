@@ -38,6 +38,7 @@ class EventController extends AbstractController
         $event->setPlace($place);
         $organizer = $entityManager->getRepository('App:User')->findOneBy(['username' => $this->getUser()->getUsername()]);
         $event->setOrganizer($organizer);
+        $event->setCurrentSubs(0);
         $form = $this->createForm(EventCreateType::class, $event);
         $form->handleRequest($request);
 
@@ -48,11 +49,10 @@ class EventController extends AbstractController
 
         } elseif ($form->get('publish')->isClicked()) {
             $event->setState($state = $entityManager->getRepository('App:EventState')->find(2));
-            $message =  'Votre sortie a bien été publié! Vous pouvez la modifier jusqu\'au début de l\'événement.';
+            $message = 'Votre sortie a bien été publié! Vous pouvez la modifier jusqu\'au début de l\'événement.';
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-
 
             $entityManager->persist($place);
             $entityManager->persist($event);
@@ -61,14 +61,12 @@ class EventController extends AbstractController
 
             $eventDetail = $entityManager->getRepository('App:Event')->findOneBy(['name' => $request->get('name')]);
 
-            $particants = $entityManager->getRepository('App:Event')->allParticipant($event->getId());
             return $this->redirectToRoute('event_detail',
                 ['id' => $event->getId(),
                     'event' => $eventDetail]);
         }
         return $this->render('event/create.html.twig',
-            ['eventCreateForm' => $form->createView(),
-                ]);
+            ['eventCreateForm' => $form->createView()]);
     }
 
     /**
@@ -81,8 +79,8 @@ class EventController extends AbstractController
     {
         //Récupère l'id de l'event pour l'affichage
         $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
-        //Si l'utilisateur est aussi l'organisateur -> affichage du formulaire pour modification
 
+        //Si l'utilisateur est aussi l'organisateur -> affichage du formulaire pour modification
         if ($this->getUser() === $event->getOrganizer()) {
             //Update l'event si modification
             $updateEventForm = $this->createForm(EventCreateType::class, $event);
@@ -97,19 +95,76 @@ class EventController extends AbstractController
 
             $entityManager->flush();
 
-            $particants = $entityManager->getRepository('App:Event')->allParticipant($event->getId());
+            $particants = $event->getSubscribers();
             return $this->render('event/editEvent.html.twig',
                 ['updateEventForm' => $updateEventForm->createView()
                     , 'event' => $event,
-                    'participants'=> $particants]);
+                    'participants' => $particants]);
         }
-            //$particants = $entityManager->getRepository('App:Event')->allParticipant($event->getId());
-            $particants = $event->getSubscribers();
+        $particants = $event->getSubscribers();
 
+        //Test si l'utilisateur est déjà inscrit ou non
+        $subOrNot = false;
+        foreach ($particants as $particant) {
+            if ($this->getUser() == $particant) {
+                $subOrNot = true;
+            };
+        }
         //Renvoie vers une page de détail sans modification possible
         return $this->render('event/detailEvent.html.twig', [
             'event' => $event,
-            'participants'=> $particants]);
+            'participants' => $particants,
+            'subOrNot' => $subOrNot]);
+    }
+
+    /**
+     * @Route(path="subscribe/{id}", name="subscribe")
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function subToEvent(EntityManagerInterface $entityManager, Request $request): RedirectResponse
+    {
+        //Récupération de l'événement
+        $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
+        //Test si l'événement est ouvert
+        if ($event->getState() == $state = $entityManager->getRepository('App:EventState')->find(2)) {
+            //Test si la date limite n'est pas dépassé
+            if ($event->getLimitDate() > (new \DateTime("now"))) {
+                //Test si il reste de la place dans l'événement
+                if ($event->getCurrentSubs() != $event->getNbrPlace() && $event->getCurrentSubs() <= $event->getNbrPlace()) {
+                    $user = $this->getUser();
+                    $event->addSubscriber($user);
+                    $event->setCurrentSubs($event->getCurrentSubs() + 1);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Inscription confirmée.');
+                } else {
+                    $this->addFlash('warning', 'Cet événement est complet. Vous ne pouvez pas vous y inscrire.');
+                }
+            } else {
+                $this->addFlash('warning', 'La date limite pour s\'inscrire à cet événement est dépassé.');
+            }
+        } else {
+            $this->addFlash('warning', 'Les inscriptions pour cet événement ne sont pas ouvertes.');
+        }
+        return $this->redirectToRoute('event_detail', ['id' => $event->getId()]);
+    }
+
+    /**
+     * @Route(path="unsubscribe/{id}", name="unsubscribe")
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function unsubToEvent(EntityManagerInterface $entityManager, Request $request): RedirectResponse
+    {
+        $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
+        $user = $this->getUser();
+        $event->removeSubscriber($user);
+        $event->setCurrentSubs($event->getCurrentSubs() - 1);
+        $entityManager->flush();
+        $this->addFlash('success', 'Vous n\'êtes plus inscrit à cet événement.');
+        return $this->redirectToRoute('event_detail', ['id' => $event->getId()]);
     }
 
     /**
@@ -137,25 +192,27 @@ class EventController extends AbstractController
     public function delete(EntityManagerInterface $entityManager, Request $request): RedirectResponse
     {
         $entityManager->remove($event = $entityManager->getRepository(Event::class)->findOneBy(['id' => $request->get('id')]));
-        //TODO enlever le remove, archiver les sorties
         $entityManager->flush();
         $this->addFlash('success', 'L\'événement a bien été annulé !');
         return $this->redirectToRoute('home_index');
     }
 
+
     /**
-     * @Route(path="subscribe/{id}", name="subscribe")
+     * @Route(path="archive/{id}", name="archive")
      * @param EntityManagerInterface $entityManager
      * @param Request $request
-     * @return RedirectResponse
      */
-    public function subToEvent(EntityManagerInterface $entityManager, Request $request): RedirectResponse
+    public function archive(EntityManagerInterface $entityManager, Request $request)
     {
         $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
-        $user = $this->getUser();
-        $event->addSubscriber($user);
+        $event->setState($state = $entityManager->getRepository('App:EventState')->find(1));
         $entityManager->flush();
-        $this->addFlash('success', 'Inscription confirmée');
-        return $this->redirectToRoute('event_detail', ['id' => $event->getId()]);
+
+    }
+
+    public function onGoing()
+    {
+
     }
 }

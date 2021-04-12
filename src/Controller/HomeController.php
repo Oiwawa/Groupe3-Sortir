@@ -25,12 +25,15 @@ class HomeController extends AbstractController
      */
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        //Si un user est connecté  = renvoi a l'index
-        if (!is_null($this->getUser())) {
-            return $this->render('home/index.html.twig');
-        }
-        //Si non, renvoi vers la page de connexion
+        //Si l'user n'est pas connecté, renvoi vers la page de connexion
+        if (is_null($this->getUser())) {
         return $this->redirectToRoute('app_login');
+        }
+
+        $eventList = $entityManager->getRepository('App:Event')->findAll();
+
+
+            return $this->render('home/index.html.twig', ['eventList'=>$eventList]);
     }
 
 

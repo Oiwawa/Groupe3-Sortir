@@ -92,6 +92,11 @@ class Event
      */
     private $state;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $currentSubs;
+
     public function __construct()
     {
         $this->subscribers = new ArrayCollection();
@@ -266,6 +271,18 @@ class Event
     public function setState(?EventState $state): self
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getCurrentSubs(): ?int
+    {
+        return $this->currentSubs;
+    }
+
+    public function setCurrentSubs(int $currentSubs): self
+    {
+        $this->currentSubs = $currentSubs;
 
         return $this;
     }
