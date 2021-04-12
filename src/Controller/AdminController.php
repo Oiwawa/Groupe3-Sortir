@@ -80,7 +80,6 @@ class AdminController extends AbstractController
 
 
         // supprime un campus
-
     /**
      * @Route(Path="campusDelete/{id}" , name="campusDelete")
      * @param EntityManagerInterface $em
@@ -201,9 +200,6 @@ class AdminController extends AbstractController
         }
         return $this->render('userRegister.html.twig', ['userRegisterForm'=>$form->createView()]);
     }
-
-
-
 
 }
 

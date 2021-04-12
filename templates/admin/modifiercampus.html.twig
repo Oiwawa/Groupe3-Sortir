@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+
+{% block title  %}Sortir - ENi - Campus  {% endblock %}
+
+
+{% block body %}
+
+    {% for status, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                <strong>
+                    {{ message }}
+                </strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+{% block title %}Modification d'un Site | {% endblock %}
+    <div class="container-fluid pt-3">
+        <div class="row">
+            <div class="col">
+                <h3>Modification d'un Site</h3>
+                <hr>
+            </div>
+        </div>
+        {{ form_start(campusForm) }}
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+                {{ form_row(campusForm.nom) }}
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2 text-center">
+            <button class="btn btn-success" type="submit">Modifier</button>
+        </div>
+    </div>
+    {{ form_end(campusForm) }}
+    </div>
+{% endblock %}

@@ -28,27 +28,28 @@
                                 <thead>
                                      <tr>
                                     <th>Nom</th>
-                                    <th>Ajouter</th>
-                                    <th>Modifier</th>
+                                         <th>Modifier</th>
                                     <th>Supprimer</th>
                                      </tr>
                                 </thead>
                                     <tbody>
+
                                     {% for campus in campuslist %}
                                         <tr>
 
                                         <td>  {{ campus.name }}  </td>
-                                         <th>
-                                             <a href="{{ url('admin_campus') }}" class="btn btn-sm btn-primary ">Ajouter</a>
-                                         </th>
+
                                         <th>
-                                            <a href="{{ url('admin_campusmodifier',{"id":campus.id}) }}" class="btn btn-sm btn-primary ">Modifier</a>
+                                            <a href="{{ path('admin_campusmodifier',{"id":campus.id}) }}" class="btn btn-sm btn-primary ">Modifier</a>
                                         </th>
                                         <th>
                                             <a href="{{ url('admin_campusDelete',{"id":campus.id}) }}" class="btn btn-sm btn-primary ">Supprimer</a>
                                         </th>
                                     </tr>
                                     {% endfor %}
+                                    <th>
+                                        <a href="{{ url('admin_campus') }}" class="btn btn-sm btn-primary ">Ajouter</a>
+                                    </th>
                                 </tbody>
                             </table>
                         </div>
