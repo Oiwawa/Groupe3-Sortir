@@ -48,20 +48,16 @@
                                     </tr>
                                     {% endfor %}
 
-
-                                    {{ form_start(campusForm) }}
-
-                                    {{ form_row(campusForm) }}
-
                                     <td>
-                                    <th>
+                                        {{ form(campusForm) }}
+                                    </td>
+                                    <td>
                                         <a href="{{ path('admin_campus') }}" class="btn btn-sm btn-primary ">Ajouter</a>
-                                    </th>
-
                                     </td>
 
 
-                                    {{ form_end(campusForm) }}
+
+
 
                                 </tbody>
                             </table>
