@@ -2,37 +2,68 @@
 {% block title %}Sortir - ENI - Accueil{% endblock %}
 
 {% block body %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="my-5 d-flex justify-content-center">
-                {# <h1>{{ event.name }}</h1> #}
-            </div>
-            {% for status, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
-                        <strong>
-                            {{ message }}
-                        </strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="my-5 d-flex justify-content-center">
+            {# <h1>{{ event.name }}</h1> #}
+        </div>
+        {% for status, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                    <strong>
+                        {{ message }}
+                    </strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+<div class="container-fluid">
+    <h3>Filtrer les sorties</h3>
+
+    <div class="row">
+        <div class="my-5 d-flex justify-content-center">
+            <table class="table table-bordered table-hover border-dark">
+                <thead>
+                <tr>
+                    <th scope="col">Nom de la sortie</th>
+                    <th scope="col">Date de la sortie</th>
+                    <th scope="col">Clôture</th>
+                    <th scope="col">Inscrits/places</th>
+                    <th scope="col">Etat</th>
+                    <th scope="col">Inscrit</th>
+                    <th scope="col">Organisateur</th>
+                    <th scope="col">Actions</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for event in eventList %}
+                <tr>
+                    <td><a href="{{ path('event_detail', {'id': event.id}) }}">{{ event.name }}</a></td>
+                    <td>{{ event.eventDate|format_datetime('short', 'short', locale='fr') }}</td>
+                    <td>{{ event.limitDate|format_datetime('short', 'none', locale='fr') }}</td>
+                    <td>{{ event.currentSubs }}/{{ event.nbrPlace }}</td>
+                    <td>{{ event.state.state }}</td>
+                    <td> x </td>
+                    <td><a href="{{ path('user_profil', {'username': event.organizer.username}) }}">
+                            {{ event.organizer.username }}
+                        </a></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-<div>
-    {% for event in eventList %}
-        {{ event.name }} | 0/{{ event.nbrPlace }} <br>
-    {% endfor %}
 </div>
 
-
-
-
-    <div>
-
-        <button class="btn btn-outline-primary">
-            <a style="text-decoration: none; color: black" href="{{ url('event_create') }}">Créer un événement</a>
-        </button>
-    </div>
-{% endblock %}
+        <div>
+            <button class="btn btn-outline-primary">
+                <a style="text-decoration: none; color: black" href="{{ url('event_create') }}">Créer un événement</a>
+            </button>
+        </div>
+        {% endblock %}
 

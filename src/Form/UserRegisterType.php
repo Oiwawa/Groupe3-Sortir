@@ -23,7 +23,7 @@ class UserRegisterType extends AbstractType
             ->add('lastName', TextType::class, ['label' => 'Nom: '])
             ->add('phone', TextType::class, ['label' => 'Téléphone: '])
             ->add('mail', TextType::class, ['label' => 'Email: '])
-            ->add('campus',EntityType::class,['class'=>Campus::class,'choice_label'=>'name'])
+            ->add('campus', EntityType::class, ['class' => Campus::class, 'choice_label' => 'name'])
             ->add('admin', TextType::class, ['label' => 'Administrateur: '])
             ->add('password', PasswordType::class, ['label' => 'Mot de passe:',
                 'mapped' => false,
@@ -31,12 +31,6 @@ class UserRegisterType extends AbstractType
                     new NotBlank([
                         'message' => 'Veuillez indiquer un mot de passe.',
                     ]),
-//                    new Length([
-//                        'min' => 6,
-//                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-//                        // max length allowed by Symfony for security reasons
-//                        'max' => 4096,
-//                    ]),
                 ],
             ]);
     }

@@ -194,14 +194,14 @@ class AdminController extends AbstractController
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('password')->getData()
                 )
             );
             $entityManager->persist($user);
             $entityManager->flush();
             $this->addFlash('success', 'utilisateur ajouté!');
         }
-        return $this->render('userRegister.html.twig', ['userRegisterForm'=>$form->createView()]);
+        return $this->render('admin/userRegister.html.twig', ['userRegisterForm'=>$form->createView()]);
     }
 
 }

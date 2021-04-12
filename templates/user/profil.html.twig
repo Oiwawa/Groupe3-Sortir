@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-    Sortir - ENI - {{ user.username|capitalize }}
+    Sortir - ENI - Profil
 {% endblock %}
 
 {% block body %}
@@ -23,7 +23,8 @@
                 <div class="my-1">
                     <p>Campus : {{ user.campus.name }}</p>
                 </div>
-                <button class="btn btn-secondary"><a href="{{ url('home_index') }}">Retour</a></button>
+                <button class="btn btn-outline-secondary"><a style="text-decoration: none; color: black"
+                                                             href="{{ url('home_index') }}">Retour</a></button>
             </div>
         </div>
     </div>

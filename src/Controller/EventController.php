@@ -8,6 +8,7 @@ use App\Entity\Event;
 use App\Entity\Place;
 use App\Form\EventCancelFormType;
 use App\Form\EventCreateType;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -108,7 +109,7 @@ class EventController extends AbstractController
         foreach ($particants as $particant) {
             if ($this->getUser() == $particant) {
                 $subOrNot = true;
-            };
+            }
         }
         //Renvoie vers une page de détail sans modification possible
         return $this->render('event/detailEvent.html.twig', [
@@ -130,7 +131,7 @@ class EventController extends AbstractController
         //Test si l'événement est ouvert
         if ($event->getState() == $state = $entityManager->getRepository('App:EventState')->find(2)) {
             //Test si la date limite n'est pas dépassé
-            if ($event->getLimitDate() > (new \DateTime("now"))) {
+            if ($event->getLimitDate() > (new DateTime("now"))) {
                 //Test si il reste de la place dans l'événement
                 if ($event->getCurrentSubs() != $event->getNbrPlace() && $event->getCurrentSubs() <= $event->getNbrPlace()) {
                     $user = $this->getUser();
@@ -211,8 +212,4 @@ class EventController extends AbstractController
 
     }
 
-    public function onGoing()
-    {
-
-    }
 }
