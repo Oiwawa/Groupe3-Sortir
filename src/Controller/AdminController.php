@@ -38,7 +38,7 @@ class AdminController extends AbstractController
 
         $campus = new campus();
         //recupere list des campus
-        $campuslist = $entityManager->getRepository(Campus::class)->findAll();
+        $campusList = $entityManager->getRepository(Campus::class)->findAll();
         $form = $this->createForm(CampusType::class, $campus);
         $form->handleRequest($request);
 
@@ -46,7 +46,7 @@ class AdminController extends AbstractController
             $entityManager->persist($campus);
             $entityManager->flush();
         }
-        return $this->render('admin/campus.html.twig',['campusForm' => $form->createView(),'campuslist'=> $campuslist]);
+        return $this->render('admin/campus.html.twig',['campusForm' => $form->createView(),'campusList'=> $campusList]);
     }
 
 
@@ -59,22 +59,25 @@ class AdminController extends AbstractController
      * @param $id
      * @return Response
      */
-    public function modifierCampus(EntityManagerInterface $entityManager , Request $request , $id): Response
+    public function modifierCampus(EntityManagerInterface $entityManager , Request $request )
     {
-        $campuslist = $entityManager->getRepository(Campus::class)->findAll();
-      $campus = $entityManager->getRepository(Campus::class)->find($id);
-      $campusForm = $this->createForm(CampusType::class, $campuslist);
+        $campusList = $entityManager->getRepository(Campus::class)->findAll();
+      $campus = $entityManager->getRepository(Campus::class)->find($request->get('id'));
+      $campusForm = $this->createForm(CampusType::class, $campus);
       $campusForm->handleRequest($request);
 
         if ($campusForm->isSubmitted() && $campusForm->isValid()) {
             $entityManager->flush();
             $this->addFlash('success', 'le campus a bien été modifié !');
 
-            return $this->redirectToRoute('admin_campus');
-        }
-        return $this->render("admin/campus.html.twig", [
+            return $this->redirectToRoute('admin_campus',[
             'campusForm' => $campusForm->createView()
-        ,"campuslist"=>$campuslist]);
+        ,'campusList'=>$campusList]);
+
+        }
+        return $this->render("admin/modifiercampus.html.twig",[
+            'campusForm' => $campusForm->createView()]
+        );
 
     }
 

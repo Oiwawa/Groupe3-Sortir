@@ -34,8 +34,8 @@
                                 </thead>
                                     <tbody>
 
-                                    {% for campus in campuslist %}
-                                        <tr>
+                                    {% for campus in campusList %}
+                                    <tr>
 
                                         <td>  {{ campus.name }}  </td>
 
@@ -47,9 +47,22 @@
                                         </th>
                                     </tr>
                                     {% endfor %}
+
+
+                                    {{ form_start(campusForm) }}
+
+                                    {{ form_row(campusForm) }}
+
+                                    <td>
                                     <th>
-                                        <a href="{{ url('admin_campus') }}" class="btn btn-sm btn-primary ">Ajouter</a>
+                                        <a href="{{ path('admin_campus') }}" class="btn btn-sm btn-primary ">Ajouter</a>
                                     </th>
+
+                                    </td>
+
+
+                                    {{ form_end(campusForm) }}
+
                                 </tbody>
                             </table>
                         </div>
