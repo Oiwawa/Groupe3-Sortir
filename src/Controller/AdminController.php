@@ -114,7 +114,7 @@ class AdminController extends AbstractController
 
     // Ajouter une ville
     /**
-     * @Route(path="villes", name="villes", methods={"GET"})
+     * @Route(path="villes", name="villes")
      * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @return Response
@@ -122,7 +122,7 @@ class AdminController extends AbstractController
     public function city(EntityManagerInterface $entityManager, Request $request): Response
     {
         $ville = new ville();
-        $villeliste = $entityManager->getRepository(Ville::class)->findAll();
+        $villeList = $entityManager->getRepository(Ville::class)->findAll();
         $form = $this->createForm(VilleType::class, $ville);
         $form->handleRequest($request);
 
@@ -130,34 +130,40 @@ class AdminController extends AbstractController
             $entityManager->persist($ville);
             $entityManager->flush();
         }
-        return $this->render('admin/city.html.twig');
+        return $this->render('admin/city.html.twig',['villeForm' => $form->createView(),'villeList'=> $villeList]);
     }
 
     /**
      * @Route(Path="modifierville", name="modifierville")
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface $entityManager
      * @param Request $request
-     * @param $id
      * @return RedirectResponse
      */
-    public function modifierVille(EntityManagerInterface $em , Request $request, $id): RedirectResponse
+    public function modifierVille(EntityManagerInterface $entityManager , Request $request)
     {
 
-        $em->remove($ville= $em->getRepository(ville::class)->find($id));
+        $villeList = $entityManager->getRepository(Ville::class)->findAll();
+        $ville = $entityManager->getRepository(Ville::class)->find($request->get('id'));
+        $villeForm = $this->createForm(VilleType::class, $ville);
+        $villeForm->handleRequest($request);
 
-        if ($ville->isSubmitted() && $ville->isValid()) {
-            $em->flush();
+        if ($villeForm->isSubmitted() && $villeForm->isValid()) {
+            $entityManager->flush();
             $this->addFlash('success', 'la ville a bien été modifié !');
 
-            return $this->redirectToRoute('admin_villes');
+            return $this->redirectToRoute('admin_villes',[
+                'villeForm' => $villeForm->createView()
+                ,'villeList'=>$villeList]);
         }
+        return $this->render('admin/modifierville.html.twig',['villeForm'=>$villeForm->createView()]);
+
 
     }
 
 
      //Supprimer une ville
     /**
-     * @Route(Path="deletecity" , name="deletecity")
+     * @Route(Path="deletecity/{id}" , name="deletecity")
      * @param EntityManagerInterface $em
      * @param Request $request
      * @param $id

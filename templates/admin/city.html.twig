@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title  %}Sortir - ENi - Campus  {% endblock %}
+{% block title %}Sortir - ENi - Campus  {% endblock %}
 
 
 {% block body %}
@@ -16,24 +16,62 @@
         {% endfor %}
     {% endfor %}
 
- {% form_theme campusForm 'bootstrap_4_layout.html.twig' %}
-<div class="container-fluid">
-    <div class="row mt-3">
-        <div class="my-5 d-flex justify-content-center">
-            <h3>Gérer les campus</h3>
-        </div>
-        <hr>
-        <div class="my-2 d-flex justify-content-center">
-            {% for villes in villelist%}
-                {{ ville.name}}
-                {{ form_start(VilleForm) }}
-                {{ form_widget(VilleForm) }}
+    {% form_theme villeForm 'bootstrap_4_layout.html.twig' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col -md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Liste des Villes
+                        <div class="panel-body">
+                            <table class="table table-bordered table-stripped">
+                                <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>code postal</th>
+                                    <th>Modifier</th>
+                                    <th>Supprimer</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for ville in villeList %}
+                                    <tr>
 
-                <button type="submit" class="btn btn-primary"><a href="{{url('admin_modifierville',{"id":ville.id})}}">Modifier</a></button>
-                <button type="reset" class="btn btn-secondary"><a href="{{ url('admin_deletecity',{"id":ville.id}) }}">Supprimé</a></button>
-                <br>
-                {{ form_end(villeForm) }}
-            {% endfor %}
+                                        <td>{{ ville.name }} </td>
+                                        <td> {{ ville.zipCode }} </td>
+
+                                        <th>
+                                            <a href=" {{ path('admin_modifierville',{"id":ville.id}) }}"
+                                               class="btn btn-sm btn-primary ">Modifier</a>
+                                        </th>
+                                        <th>
+                                            <a href="{{ url('admin_deletecity',{"id":ville.id}) }}"
+                                               class="btn btn-sm btn-primary ">Supprimer</a>
+                                        </th>
+                                    </tr>
+                                {% endfor %}
+
+                                <td>
+                                    {{ form_start(villeForm, {'label':false}) }}
+
+                                    {{ form_row(villeForm) }}
+
+
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        Ajouter
+                                    </button>
+                                    {{ form_end(villeForm) }}
+                                </td>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
+{% endblock %}
