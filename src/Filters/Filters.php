@@ -3,9 +3,11 @@
 namespace App\Filters;
 
 use App\Entity\Campus;
+use App\Entity\Event;
 use App\Entity\EventState;
 use DateTime;
 use App\Entity\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class Filters
@@ -24,16 +26,22 @@ class Filters
     /**
      * @var User
      */
-    public $organizer = [];
+    public $organizer;
 
     /**
-     * @var User[]
+     * @var User
      */
-    public $subscribed = [];
+    public $subscribed;
     /**
-     * @var EventState[]
+     * @var User
      */
-    public $state = [];
+    public $notSubscribed;
+
+    /**
+     * @var Event[]
+     */
+    public $passedEvents;
+
 
     /**
      * @var DateTime
@@ -44,6 +52,9 @@ class Filters
      * @var DateTime
      */
     public $dateEnd;
+
+
+
 
 
 }

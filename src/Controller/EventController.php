@@ -96,25 +96,25 @@ class EventController extends AbstractController
 
             $entityManager->flush();
 
-            $particants = $event->getSubscribers();
+            $participants = $event->getSubscribers();
             return $this->render('event/editEvent.html.twig',
                 ['updateEventForm' => $updateEventForm->createView()
                     , 'event' => $event,
-                    'participants' => $particants]);
+                    'participants' => $participants]);
         }
-        $particants = $event->getSubscribers();
+        $participants = $event->getSubscribers();
 
         //Test si l'utilisateur est déjà inscrit ou non
         $subOrNot = false;
-        foreach ($particants as $particant) {
-            if ($this->getUser() == $particant) {
+        foreach ($participants as $participant) {
+            if ($this->getUser() == $participant) {
                 $subOrNot = true;
             }
         }
         //Renvoie vers une page de détail sans modification possible
         return $this->render('event/detailEvent.html.twig', [
             'event' => $event,
-            'participants' => $particants,
+            'participants' => $participants,
             'subOrNot' => $subOrNot]);
     }
 

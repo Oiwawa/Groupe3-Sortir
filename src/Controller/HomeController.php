@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @Route(path="", name="index", methods={"GET"})
+     * @Route(path="", name="index")
      * @param Request $request
      * @param EntityManagerInterface $entityManager
      * @param EventRepository $filtersRepository
@@ -35,16 +35,22 @@ class HomeController extends AbstractController
         }
         $filters = new Filters();
 
-        $eventList = $entityManager->getRepository('App:Event')->findAll();
+
         $filtersForm = $this->createForm(FiltersType::class, $filters);
         $filtersForm->handleRequest($request);
-        $filtersResults = $filtersRepository->findSearch($filters);
+
+
+        $filtersResults = $filtersRepository->findSearch($filters, $this->getUser());
+
+        $eventList = $entityManager->getRepository('App:Event')->findAll();
+
+
 
 
         return $this->render('home/index.html.twig',
-            ['eventList'=>$eventList,
-                'filtersForm'=>$filtersForm->createView(),
-                'filtersResults'=>$filtersResults
+            ['filtersForm'=>$filtersForm->createView(),
+                'filtersResults'=>$filtersResults,
+                'eventList'=>$eventList
             ]);
     }
 

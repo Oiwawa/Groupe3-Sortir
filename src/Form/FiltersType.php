@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\EventState;
 use App\Filters\Filters;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -29,16 +30,27 @@ class FiltersType extends AbstractType
                 'placeholder' => 'Campus',
                 'required' => false,
                 'class' => Campus::class,
-                // 'expanded' => true,
-                //   'multiple' => true
+
             ])
-            ->add('state', EntityType::class, [
-                'label' => false,
-                'choice_label' => 'state',
+            ->add('organizer', CheckboxType::class, [
+                'label' => 'Sorties dont je suis l\'organisateur.trice',
                 'required' => false,
-                'class' => EventState::class,
-                'expanded' => true,
-                'multiple' => true
+
+            ])
+            ->add('subscribed', CheckboxType::class, [
+                'label' => 'Sorties auxquelles je suis inscrit.e',
+                'required' => false,
+
+            ])
+            ->add('notSubscribed', CheckboxType::class, [
+                'label' => 'Sorties auxquelles je ne suis pas inscrit.e',
+                'required' => false,
+
+            ])
+            ->add('passedEvents', CheckboxType::class, [
+                'label' => 'Sorties passées',
+                'required' => false,
+
             ])
             ->add('dateStart', DateTimeType::class, [
                 'label' => false,
