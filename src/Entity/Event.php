@@ -239,29 +239,6 @@ class Event
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getSubscribers(): Collection
-    {
-        return $this->subscribers;
-    }
-
-    public function addSubscriber(UserInterface $subscriber): self
-    {
-        if (!$this->subscribers->contains($subscriber)) {
-            $this->subscribers[] = $subscriber;
-        }
-
-        return $this;
-    }
-
-    public function removeSubscriber(UserInterface $subscriber): self
-    {
-        $this->subscribers->removeElement($subscriber);
-
-        return $this;
-    }
 
     public function getState(): ?EventState
     {
@@ -283,6 +260,29 @@ class Event
     public function setCurrentSubs(int $currentSubs): self
     {
         $this->currentSubs = $currentSubs;
+
+        return $this;
+    }
+    /**
+     * @return Collection|User[]
+     */
+    public function getSubscribers(): Collection
+    {
+        return $this->subscribers;
+    }
+
+    public function addSubscriber(UserInterface $subscriber): self
+    {
+        if (!$this->subscribers->contains($subscriber)) {
+            $this->subscribers[] = $subscriber;
+        }
+
+        return $this;
+    }
+
+    public function removeSubscriber(UserInterface $subscriber): self
+    {
+        $this->subscribers->removeElement($subscriber);
 
         return $this;
     }

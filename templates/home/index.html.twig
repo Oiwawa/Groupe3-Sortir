@@ -2,27 +2,57 @@
 {% block title %}Sortir - ENI - Accueil{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="my-5 d-flex justify-content-center">
-            {# <h1>{{ event.name }}</h1> #}
-        </div>
-        {% for status, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
-                    <strong>
-                        {{ message }}
-                    </strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    {% for status, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="my-5 d-flex justify-content-center">
+                        {# <h1>{{ event.name }}</h1> #}
+                    </div>
+                    <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                        <strong>
+                            {{ message }}
+                        </strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 </div>
-            {% endfor %}
+            </div>
         {% endfor %}
-    </div>
-</div>
-<div class="container-fluid">
-    <h3>Filtrer les sorties</h3>
+    {% endfor %}
 
-    <div class="row">
+    <div class="container-fluid">
+        <div class="mb-3 row">
+            {% form_theme filtersForm 'bootstrap_4_layout.html.twig' %}
+            <h3>Filtrer les sorties</h3>
+            <div class="ms-4 p-3 col-3">
+                {{ form_start(filtersForm) }}
+                <div class="pb-3">
+                    {{ form_row(filtersForm.campus) }}
+                </div>
+                <div class="pb-3">
+                    {{ form_row(filtersForm.text) }}
+                </div>
+                <div class="row">
+                    <div class="p-3 col-6">
+                        Entre
+                        {{ form_row(filtersForm.dateStart) }}
+                    </div>
+                    <div class="p-3 col-6">
+                        et
+                        {{ form_row(filtersForm.dateEnd) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-5">
+                {{ form_row(filtersForm.state) }}
+            </div>
+            <div class="col-2">
+                {{ form_row(filtersForm.search) }}
+                {{ form_end(filtersForm) }}
+            </div>
+        </div>
+    </div>
+    <div class="mb-3 row">
         <div class="my-5 d-flex justify-content-center">
             <table class="table table-bordered table-hover border-dark">
                 <thead>
@@ -41,29 +71,29 @@
                 <tbody>
 
                 {% for event in eventList %}
-                <tr>
-                    <td><a href="{{ path('event_detail', {'id': event.id}) }}">{{ event.name }}</a></td>
-                    <td>{{ event.eventDate|format_datetime('short', 'short', locale='fr') }}</td>
-                    <td>{{ event.limitDate|format_datetime('short', 'none', locale='fr') }}</td>
-                    <td>{{ event.currentSubs }}/{{ event.nbrPlace }}</td>
-                    <td>{{ event.state.state }}</td>
-                    <td> x </td>
-                    <td><a href="{{ path('user_profil', {'username': event.organizer.username}) }}">
-                            {{ event.organizer.username }}
-                        </a></td>
-                    <td></td>
-                </tr>
+                    <tr>
+                        <td><a href="{{ path('event_detail', {'id': event.id}) }}">{{ event.name }}</a></td>
+                        <td>{{ event.eventDate|format_datetime('short', 'short', locale='fr') }}</td>
+                        <td>{{ event.limitDate|format_datetime('short', 'none', locale='fr') }}</td>
+                        <td>{{ event.currentSubs }}/{{ event.nbrPlace }}</td>
+                        <td>{{ event.state.state }}</td>
+                        <td> x</td>
+                        <td><a href="{{ path('user_profil', {'username': event.organizer.username}) }}">
+                                {{ event.organizer.username }}
+                            </a></td>
+                        <td></td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-</div>
+    </div>
 
-        <div>
-            <button class="btn btn-outline-primary">
-                <a style="text-decoration: none; color: black" href="{{ url('event_create') }}">Créer un événement</a>
-            </button>
-        </div>
-        {% endblock %}
+    <div>
+        <button class="btn btn-outline-primary">
+            <a style="text-decoration: none; color: black" href="{{ url('event_create') }}">Créer un événement</a>
+        </button>
+    </div>
+{% endblock %}
 
