@@ -1,10 +1,7 @@
 {% extends "base.html.twig" %}
 
-{% block title  %}Sortir - ENi - Campus  {% endblock %}
-
-
+{% block title %}Sortir - ENI - Campus  {% endblock %}
 {% block body %}
-
     {% for status, messages in app.flashes %}
         {% for message in messages %}
             <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
@@ -15,50 +12,41 @@
             </div>
         {% endfor %}
     {% endfor %}
-
     {% form_theme campusForm 'bootstrap_4_layout.html.twig' %}
-
     <div class="container">
         <div class="row">
             <div class="col-md-8 col -md-offset-2">
-                <div class ="panel panel-default">
-                    <div class ="panel-heading">Liste des Campus
+                <div class="panel panel-default">
+                    <div class="panel-heading">Liste des Campus
                         <div class="panel-body">
                             <table class="table table-bordered table-stripped">
                                 <thead>
-                                     <tr>
+                                <tr>
                                     <th>Nom</th>
-                                         <th>Modifier</th>
+                                    <th>Modifier</th>
                                     <th>Supprimer</th>
-                                     </tr>
+                                </tr>
                                 </thead>
-                                    <tbody>
-
-                                    {% for campus in campusList %}
+                                <tbody>
+                                {% for campus in campusList %}
                                     <tr>
-
-                                        <td>  {{ campus.name }}  </td>
-
+                                        <td>{{ campus.name }}</td>
                                         <th>
-                                            <a href="{{ path('admin_campusmodifier',{"id":campus.id}) }}" class="btn btn-sm btn-primary ">Modifier</a>
+                                            <a href="{{ path('admin_campusmodifier',{"id":campus.id}) }}"
+                                               class="btn btn-sm btn-primary ">Modifier</a>
                                         </th>
                                         <th>
-                                            <a href="{{ url('admin_campusDelete',{"id":campus.id}) }}" class="btn btn-sm btn-primary ">Supprimer</a>
+                                            <a href="{{ url('admin_campusDelete',{"id":campus.id}) }}"
+                                               class="btn btn-sm btn-primary ">Supprimer</a>
                                         </th>
                                     </tr>
-                                    {% endfor %}
-
-                                    <td>
-                                        {{ form(campusForm) }}
-                                    </td>
-                                    <td>
-                                        <a href="{{ path('admin_campus') }}" class="btn btn-sm btn-primary ">Ajouter</a>
-                                    </td>
-
-
-
-
-
+                                {% endfor %}
+                                <td>
+                                    {{ form(campusForm) }}
+                                </td>
+                                <td>
+                                    <a href="{{ path('admin_campus') }}" class="btn btn-sm btn-primary ">Ajouter</a>
+                                </td>
                                 </tbody>
                             </table>
                         </div>
@@ -67,10 +55,4 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
-
-
-
-
-

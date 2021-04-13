@@ -212,4 +212,10 @@ class EventController extends AbstractController
 
     }
 
+    public function updateList(EntityManagerInterface $entityManager, Request $request){
+        $event = $entityManager->getRepository('App:Event')->findAll();
+
+
+    }
+
 }
