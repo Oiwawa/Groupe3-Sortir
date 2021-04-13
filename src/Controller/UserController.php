@@ -44,8 +44,8 @@ class UserController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $user->setPassword( $passwordEncoder->encodePassword( $user, $form->get('password')->getData()));
-                $entityManager->flush();
                 $entityManager->refresh($user);
+                $entityManager->flush();
                 $this->addFlash('success', 'Votre profil a été modifié avec succès!');
 
             }

@@ -38,13 +38,13 @@ class HomeController extends AbstractController
         $eventList = $entityManager->getRepository('App:Event')->findAll();
         $filtersForm = $this->createForm(FiltersType::class, $filters);
         $filtersForm->handleRequest($request);
-        $filtersResult = $filtersRepository->findSearch($filters);
+        $filtersResults = $filtersRepository->findSearch($filters);
 
 
         return $this->render('home/index.html.twig',
             ['eventList'=>$eventList,
                 'filtersForm'=>$filtersForm->createView(),
-               // 'filtersResult'=>$filtersResult
+                'filtersResults'=>$filtersResults
             ]);
     }
 

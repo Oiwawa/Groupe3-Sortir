@@ -45,6 +45,8 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($campus);
             $entityManager->flush();
+            return $this->redirectToRoute('admin_campus');
+
         }
         return $this->render('admin/campus.html.twig',['campusForm' => $form->createView(),'campusList'=> $campusList]);
     }
@@ -121,14 +123,16 @@ class AdminController extends AbstractController
      */
     public function city(EntityManagerInterface $entityManager, Request $request): Response
     {
-        $ville = new ville();
         $villeList = $entityManager->getRepository(Ville::class)->findAll();
+
+        $ville = new ville();
         $form = $this->createForm(VilleType::class, $ville);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($ville);
             $entityManager->flush();
+            return $this->redirectToRoute('admin_villes');
         }
         return $this->render('admin/city.html.twig',['villeForm' => $form->createView(),'villeList'=> $villeList]);
     }
@@ -137,7 +141,7 @@ class AdminController extends AbstractController
      * @Route(Path="modifierville", name="modifierville")
      * @param EntityManagerInterface $entityManager
      * @param Request $request
-     * @return RedirectResponse
+     * @return RedirectResponse|Response
      */
     public function modifierVille(EntityManagerInterface $entityManager , Request $request)
     {

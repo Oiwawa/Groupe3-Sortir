@@ -70,7 +70,7 @@
                 </thead>
                 <tbody>
 
-                {% for event in eventList %}
+                {% for event in filtersResults %}
                     <tr>
                         <td><a href="{{ path('event_detail', {'id': event.id}) }}">{{ event.name }}</a></td>
                         <td>{{ event.eventDate|format_datetime('short', 'short', locale='fr') }}</td>

@@ -20,23 +20,50 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    public function allParticipant($id){
+    public function allParticipant($id)
+    {
         $query = $this->createQueryBuilder('event')
             ->join('event.subscribers', 'user');
         return $participants = $query->getQuery()->getResult();
     }
 
-    public function findSearch(Filters $filters) :array
+    public function findSearch(Filters $filters): array
     {
 
         $query = $this->createQueryBuilder('filters')
             ->select('filters', 'campus')
-            ->join('filters.campus', 'campus');
-
-        if(!empty($filters->campus)){
-            $query = $query->andWhere('se');
+            ->join('filters.campus', 'campus')
+            ->join('filters.state', 'state')
+            ->join('filters.organizer', 'organizer')
+            ->join('filters.subscribers', 'subscribers')
+    ;
+        if (!empty($filters->text)) {
+            $query = $query
+                ->andWhere('filters.eventName LIKE :text')
+                ->setParameter('text', "%{$filters->text}%");
+        }
+        if (!empty($filters->campus)) {
+            $query = $query
+                ->andWhere('filters.campus IN (:campus)')
+                ->setParameter('campus', $filters->campus);
         }
 
+        if (!empty($filters->state)) {
+            $query = $query
+                ->andWhere('filters.state IN (:state)')
+                ->setParameter('state', $filters->state);
+        }
+
+        if(!empty($filters->dateStart)){
+            $query = $query
+                ->andWhere('filters.eventDate > (:dateStart)')
+                ->setParameter('dateStart', $filters->dateStart);
+        }
+        if(!empty($filters->dateEnd)){
+            $query = $query
+                ->andWhere('filters.eventDate < (:dateEnd)')
+                ->setParameter('dateEnd', $filters->dateEnd);
+        }
         return $query->getQuery()->getResult();
     }
 
