@@ -3,10 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Event;
-use App\Entity\User;
 use App\Filters\Filters;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -18,32 +17,26 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class EventRepository extends ServiceEntityRepository
 {
-    /**
-     * @var EntityManagerInterface
-     */
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Event::class);
 
     }
 
-    public function allParticipant($id)
-    {
-        $query = $this->createQueryBuilder('event')
-            ->join('event.subscribers', 'user');
-        return $participants = $query->getQuery()->getResult();
-    }
-
+    /**
+     * @param Filters $filters
+     * @param UserInterface $user
+     * @return Event[]
+     */
     public function findSearch(Filters $filters, UserInterface $user): array
     {
 
         $query = $this->createQueryBuilder('event')
             ->select('event', 'campus')
             ->join('event.campus', 'campus')
-            ->join('event.organizer', 'organizer')
-            ->join('event.subscribers', 'subscribers');
-
+//            ->join('event.organizer', 'organizer')
+//            ->join('event.subscribers', 'subscribers');
+        ;
 
         if (!empty($filters->text)) {
             $query = $query
@@ -58,7 +51,7 @@ class EventRepository extends ServiceEntityRepository
 //        if(!empty($filters->organizer)){
 //            $query = $query
 //                ->andWhere('organizer = :organizer')
-//                ->setParameter('organizer', $user );
+//                ->setParameter('organizer', $user);
 //        }
 //
 //        if(!empty($filters->subscribed)){
@@ -67,18 +60,17 @@ class EventRepository extends ServiceEntityRepository
 //                ->setParameter('user', $user);
 //        }
 //
-//        if (!empty($filters->dateStart)) {
-//            $query = $query
-//                ->andWhere('event.eventDate > (:dateStart)')
-//                ->setParameter('dateStart', $filters->dateStart);
-//        }
-//        if (!empty($filters->dateEnd)) {
-//            $query = $query
-//                ->andWhere('event.eventDate < (:dateEnd)')
-//                ->setParameter('dateEnd', $filters->dateEnd);
-//        }
+        if (!empty($filters->dateStart)) {
+            $query = $query
+                ->andWhere('event.eventDate > (:dateStart)')
+                ->setParameter('dateStart', $filters->dateStart);
+        }
+        if (!empty($filters->dateEnd)) {
+            $query = $query
+                ->andWhere('event.eventDate < (:dateEnd)')
+                ->setParameter('dateEnd', $filters->dateEnd);
+        }
         return $query->getQuery()->getResult();
     }
-
 
 }

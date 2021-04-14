@@ -129,14 +129,18 @@ class EventController extends AbstractController
         //Récupération de l'événement
         $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
         //Test si l'événement est ouvert
-        if ($event->getState() == $state = $entityManager->getRepository('App:EventState')->find(2)) {
+        if ($event->getState() != $state = $entityManager->getRepository('App:EventState')->find(2)) {
             //Test si la date limite n'est pas dépassé
             if ($event->getLimitDate() > (new DateTime("now"))) {
                 //Test si il reste de la place dans l'événement
-                if ($event->getCurrentSubs() != $event->getNbrPlace() && $event->getCurrentSubs() <= $event->getNbrPlace()) {
-                    $user = $this->getUser();
-                    $event->addSubscriber($user);
+                if ($event->getCurrentSubs() <= $event->getNbrPlace()) {
+                    //Ajout de l'utilisateur + incrémentation du nombre de participants
+                    $event->addSubscriber( $user = $this->getUser());
                     $event->setCurrentSubs($event->getCurrentSubs() + 1);
+                    //Fermeture des inscriptions si l'événement est complet
+                    if ($event->getCurrentSubs() == $event->getNbrPlace()) {
+                        $event->setState($state = $entityManager->getRepository('App:EventState')->find(3));
+                    }
                     $entityManager->flush();
                     $this->addFlash('success', 'Inscription confirmée.');
                 } else {
@@ -163,6 +167,9 @@ class EventController extends AbstractController
         $user = $this->getUser();
         $event->removeSubscriber($user);
         $event->setCurrentSubs($event->getCurrentSubs() - 1);
+        if ($event->getCurrentSubs() > $event->getNbrPlace()) {
+            $event->setState($state = $entityManager->getRepository('App:EventState')->find(2));
+        }
         $entityManager->flush();
         $this->addFlash('success', 'Vous n\'êtes plus inscrit à cet événement.');
         return $this->redirectToRoute('event_detail', ['id' => $event->getId()]);

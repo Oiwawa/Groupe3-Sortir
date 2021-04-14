@@ -57,57 +57,77 @@
     </div>
     <div class="mb-3 row">
         <div class="my-5 d-flex justify-content-center">
-            <table class="table table-bordered table-hover border-dark">
-                <thead>
-                <tr>
-                    <th scope="col">Nom de la sortie</th>
-                    <th scope="col">Date de la sortie</th>
-                    <th scope="col">Clôture</th>
-                    <th scope="col">Inscrits/places</th>
-                    <th scope="col">Etat</th>
-                    <th scope="col">Inscrit</th>
-                    <th scope="col">Organisateur</th>
-                    <th scope="col">Actions</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                {% for event in eventList %}
+            {% if filtersResults|length > 0 %}
+                <table class="table table-bordered table-hover border-dark">
+                    <thead>
                     <tr>
-                        <td><a href="{{ path('event_detail', {'id': event.id}) }}">{{ event.name }}</a></td>
-                        <td>{{ event.eventDate|format_datetime('short', 'short', locale='fr') }}</td>
-                        <td>{{ event.limitDate|format_datetime('short', 'none', locale='fr') }}</td>
-                        <td>{{ event.currentSubs }}/{{ event.nbrPlace }}</td>
-                        <td>{{ event.state.state }}</td>
-                        {% if(event.subscribers.contains(app.user)) %}
-                            <td class="text-center">X</td>
-                        {% else %}
-                            <td></td>
-                        {% endif %}
-                        <td><a href="{{ path('user_profil', {'username': event.organizer.username}) }}">
-                                {{ event.organizer.username }}
-                            </a></td>
-                        <td>
-                            <a href="{{ path('event_detail', {'id': event.id}) }}">Afficher</a>
-                            {% if(event.organizer is same as app.user) %}
-                                <a href="{{ path('event_cancel', {'id': event.id}) }}"
-                                   class="btn btn-danger">Annuler</a>
-                                {% if(event.state.id == 1) %}
-                                    <a href="{{ path('event_detail', {'id': event.id}) }}"></a>
-                                {% endif %}
-                            {% endif %}
-                            {% if(event.subscribers.contains(app.user)) %}
-                                <a href="{{ path('event_detail', {'id': event.id}) }}">Se désister</a>
-                            {% else %}
-                                <a href="{{ path('event_detail', {'id': event.id}) }}">S'inscrire</a>
-                            {% endif %}
-                        </td>
+                        <th scope="col">Nom de la sortie</th>
+                        <th scope="col">Date de la sortie</th>
+                        <th scope="col">Clôture</th>
+                        <th scope="col">Inscrits/places</th>
+                        <th scope="col">Etat</th>
+                        <th scope="col">Inscrit</th>
+                        <th scope="col">Organisateur</th>
+                        <th scope="col">Actions</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for event in filtersResults %}
+                        <tr>
+                            <td><a href="{{ path('event_detail', {'id': event.id}) }}">{{ event.name }}</a></td>
+                            <td>{{ event.eventDate|format_datetime('short', 'short', locale='fr') }}</td>
+                            <td>{{ event.limitDate|format_datetime('short', 'none', locale='fr') }}</td>
+                            <td>{{ event.currentSubs }}/{{ event.nbrPlace }}</td>
+                            <td>{{ event.state.state }}</td>
+
+                            {% if(event.subscribers.contains(app.user)) %}
+                                <td class="text-center">X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td><a href="{{ path('user_profil', {'username': event.organizer.username}) }}">
+                                    {{ event.organizer.username }}
+                                </a></td>
+                            <td>
+                                <a href="{{ path('event_detail', {'id': event.id}) }}">Afficher</a>
+                                {# Si l'utilisateur est l'organisateur: Annulation #}
+                                {% if(event.organizer is same as app.user) %}
+
+                                    <a href="{{ path('event_cancel', {'id': event.id}) }}">Annuler</a>
+                                    {# Si l'utilisateur est l'organisateur ET l'évenement est en création #}
+                                    {% if(event.state.id == 1) %}
+
+                                        <a href="{{ path('event_detail', {'id': event.id}) }}">Publier</a>
+
+                                    {% endif %}
+
+                                {% endif %}
+                                {# Si l'événement est en statut "Ouvert" #}
+                                {% if(event.state.id == 2) %}
+                                    {# Que l'utilisateur est inscrit #}
+                                    {% if(event.subscribers.contains(app.user)) %}
+                                        {# et qu'il n'est pas l'organisateur #}
+                                        {% if(event.organizer is not same as app.user) %}
+
+                                            <a href="{{ path('event_detail', {'id': event.id}) }}">Se désister</a>
+
+                                            {# Si il n'est pas inscrit et que ce n'est pas l'organisateur #}
+                                        {% else %}
+
+                                            <a href="{{ path('event_detail', {'id': event.id}) }}">S'inscrire</a>
+
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Aucun résultat ne correspond à votre recherche.</p>
+            {% endif %}
         </div>
-    </div>
     </div>
 
     <div>

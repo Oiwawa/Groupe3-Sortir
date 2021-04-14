@@ -31,26 +31,22 @@ class HomeController extends AbstractController
     {
         //Si l'user n'est pas connecté, renvoi vers la page de connexion
         if (is_null($this->getUser())) {
-        return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_login');
         }
+
         $filters = new Filters();
-
-
         $filtersForm = $this->createForm(FiltersType::class, $filters);
         $filtersForm->handleRequest($request);
-
-
         $filtersResults = $filtersRepository->findSearch($filters, $this->getUser());
 
-        $eventList = $entityManager->getRepository('App:Event')->findAll();
-
-
-
-
+//        if (empty($filtersResults)){
+//   $filtersResults = $entityManager->getRepository('App:Event')->findAll();
+//        }
         return $this->render('home/index.html.twig',
-            ['filtersForm'=>$filtersForm->createView(),
-                'filtersResults'=>$filtersResults,
-                'eventList'=>$eventList
+            [
+                'filtersForm' => $filtersForm->createView(),
+                'filtersResults' => $filtersResults,
+                //   'eventList'=>$eventList
             ]);
     }
 

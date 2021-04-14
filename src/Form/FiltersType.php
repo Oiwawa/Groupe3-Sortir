@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\EventState;
 use App\Filters\Filters;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -30,6 +31,8 @@ class FiltersType extends AbstractType
                 'placeholder' => 'Campus',
                 'required' => false,
                 'class' => Campus::class,
+                'expanded'=>false,
+                'multiple'=>false,
 
             ])
             ->add('organizer', CheckboxType::class, [
@@ -63,7 +66,6 @@ class FiltersType extends AbstractType
                 'required' => false
             ])
             ->add('search', SubmitType::class, [
-                'attr' => ['value' => 1],
                 'label' => 'Rechercher'
             ]);
     }
@@ -72,7 +74,13 @@ class FiltersType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Filters::class,
+            'method'=>'GET',
             'csrf_protection' => false
         ]);
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return '';
     }
 }
