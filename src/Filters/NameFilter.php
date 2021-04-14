@@ -2,13 +2,13 @@
 
 namespace App\Filters;
 
-class CampusFilter
+class NameFilter
 {
 
     /**
      * @var string
      */
-    public $text;
+    public $text = '';
 
 
 

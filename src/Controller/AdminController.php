@@ -7,8 +7,8 @@ namespace App\Controller;
 use App\Entity\Campus;
 use App\Entity\User;
 use App\Entity\Ville;
-use App\Filters\CampusFilter;
-use App\Form\CampusFilterType;
+use App\Filters\NameFilter;
+use App\Form\NameFilterType;
 use App\Form\CampusType;
 use App\Form\UserProfilType;
 use App\Form\UserRegisterType;
@@ -42,19 +42,14 @@ class AdminController extends AbstractController
 
         $campus = new campus();
         //recupere list des campus
-        $campusList = $entityManager->getRepository(Campus::class)->findAll();
+        //$campusList = $entityManager->getRepository(Campus::class)->findAll();
 
         //Formulaire de recherche
-        $text = new CampusFilter();
-        $filter = $this->createForm(CampusFilterType::class, $text);
+        $text = new NameFilter();
+        $filter = $this->createForm(NameFilterType::class, $text);
         $filter->handleRequest($request);
         //Si le form de filtre est valid et soumis, je fais la recherche
-        if ($filter->isSubmitted() && $filter->isValid()) {
-
-            $campusList = $campusRepository->findName($text);
-            return $this->redirectToRoute('admin_campus', ['campusList'=>$campusList]);
-
-        }
+        $campusList = $campusRepository->findName($text);
 
         //Formulaire d'ajout
         $form = $this->createForm(CampusType::class, $campus);
