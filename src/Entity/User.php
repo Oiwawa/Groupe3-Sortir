@@ -8,9 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @Vich\Uploadable()
  */
 class User implements UserInterface
 {
@@ -49,11 +51,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=20)
-     * @Assert\Regex(pattern="#^
-    (?:(?:\+|00)33|0)
-    \s*[1-9]
-    (?:[\s.-]*\d{2}){4}
-    $#", message="Merci de saisir un numéro valide.")
+     * @Assert\Regex(pattern="#^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$#",
+     * message="Merci de saisir un numéro valide.")
      */
     private $phone;
 
@@ -84,6 +83,7 @@ class User implements UserInterface
      * @ORM\ManyToMany(targetEntity=Event::class, mappedBy="subscribers")
      */
     private $eventsSubbed;
+
 
     public function __construct()
     {
@@ -241,6 +241,7 @@ class User implements UserInterface
         return $this;
     }
 
+
     /**
      * @return Collection|Event[]
      */
@@ -297,4 +298,6 @@ class User implements UserInterface
 
         return $this;
     }
+
+
 }

@@ -22,7 +22,21 @@
             <div class="my-5 d-flex justify-content-center">
                 <div>
                     {{ form_start(userProfilForm) }}
-                    {{ form_widget(userProfilForm) }}
+                    {{ form_row(userProfilForm.username) }}
+                    <br>
+                    {{ form_row(userProfilForm.firstName) }}
+                    <br>
+                    {{ form_row(userProfilForm.lastName) }}
+                    <br>
+                    {{ form_row(userProfilForm.phone) }}
+                    <br>
+                    {{ form_row(userProfilForm.mail) }}
+                    <br>
+                    {{ form_row(userProfilForm.password) }}
+                    <br>
+                    {{ form_row(userProfilForm.campus) }}
+                    <br>
+
                     <button type="submit" class="btn btn-primary">Modifier</button>
                     <button type="reset" class="btn btn-secondary">Annuler</button>
                     <br>

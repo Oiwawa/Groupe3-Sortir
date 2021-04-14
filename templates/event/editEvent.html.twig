@@ -42,19 +42,39 @@
                         <br>
                         {{ form_row(updateEventForm.city) }}
                         <br>
-
-                        {{ form_end(updateEventForm) }}
-                        <button class="btn btn-secondary ms-2" type="button">
-                            <a style="text-decoration: none; color: white"
-                               href="{{ url('event_cancel', {'id':event.id}) }}">Supprimer la sortie</a>
-                        </button>
+                        {{ form_row(updateEventForm.place) }}
                     </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-5 mx-auto d-flex justify-content-center">
+                            <div class="me-4">
+                                {{ form_row(updateEventForm.register) }}
+                            </div>
+                            <div class="me-4">
+                                {{ form_row(updateEventForm.publish) }}
+                            </div>
+                            <div class="me-4">
+                                <button class="btn btn-secondary ms-2" type="button">
+                                    <a style="text-decoration: none; color: white"
+                                       href="{{ url('event_cancel', {'id':event.id}) }}">Supprimer la sortie</a>
+                                </button>
+                            </div>
+                            <div>
+                                {{ form_row(updateEventForm.cancel) }}
+                            </div>
+                            {{ form_end(updateEventForm) }}
+                        </div>
+                    </div>
+                    {{ form_end(updateEventForm) }}
                 </div>
             </div>
         </div>
-        <button class="btn btn-outline-dark">
-            <a  style="text-decoration: none; color: mediumslateblue" href="{{ url('event_create') }}">Organiser une nouvelle sortie</a>
-        </button>
+    </div>
+    <button class="btn btn-outline-dark">
+        <a style="text-decoration: none; color: mediumslateblue" href="{{ url('event_create') }}">Organiser une
+            nouvelle sortie</a>
+    </button>
     </div>
 
 {% endblock %}
