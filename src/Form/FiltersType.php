@@ -43,11 +43,14 @@ class FiltersType extends AbstractType
             ->add('subscribed', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je suis inscrit.e',
                 'required' => false,
+                'disabled' => true,
 
             ])
             ->add('notSubscribed', CheckboxType::class, [
                 'label' => 'Sorties auxquelles je ne suis pas inscrit.e',
                 'required' => false,
+                'disabled' => true,
+
 
             ])
             ->add('passedEvents', CheckboxType::class, [

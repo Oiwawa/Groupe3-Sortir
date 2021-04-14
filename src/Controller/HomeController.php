@@ -46,7 +46,6 @@ class HomeController extends AbstractController
             [
                 'filtersForm' => $filtersForm->createView(),
                 'filtersResults' => $filtersResults,
-                //   'eventList'=>$eventList
             ]);
     }
 

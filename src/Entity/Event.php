@@ -28,11 +28,13 @@ class Event
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan("today")
      */
     private $eventDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan("today")
      */
     private $limitDate;
 
@@ -263,6 +265,7 @@ class Event
 
         return $this;
     }
+
     /**
      * @return Collection|User[]
      */

@@ -32,17 +32,20 @@ class EventController extends AbstractController
      */
     public function create(EntityManagerInterface $entityManager, Request $request): Response
     {
-
         $place = new Place();
-
         $event = new Event();
         $event->setPlace($place);
         $organizer = $entityManager->getRepository('App:User')->findOneBy(['username' => $this->getUser()->getUsername()]);
         $event->setOrganizer($organizer);
         $event->setCurrentSubs(0);
         $form = $this->createForm(EventCreateType::class, $event);
-        $form->handleRequest($request);
 
+        if($event->getLimitDate() > $event->getEventDate()
+            && $event->getLimitDate() < (new DateTime("now"))
+            && $event->getEventDate() < (new DateTime("now"))){
+            $this->addFlash('warning', 'Les dates indiqués ne sont pas valides.');
+        }
+        $form->handleRequest($request);
         $message = '';
         if ($form->get('register')->isClicked()) {
             $event->setState($state = $entityManager->getRepository('App:EventState')->find(1));
@@ -90,11 +93,14 @@ class EventController extends AbstractController
             //Update le lieu si modification
             if ($updateEventForm->get('register')->isClicked()) {
                 $event->setState($state = $entityManager->getRepository('App:EventState')->find(1));
+                $entityManager->flush();
             } elseif ($updateEventForm->get('publish')->isClicked()) {
                 $event->setState($state = $entityManager->getRepository('App:EventState')->find(2));
+                $this->addFlash('success', 'Votre sortie est publiée!');
+                $entityManager->flush();
+                return $this->redirectToRoute('home_index');
             }
 
-            $entityManager->flush();
 
             $participants = $event->getSubscribers();
             return $this->render('event/editEvent.html.twig',
@@ -129,20 +135,26 @@ class EventController extends AbstractController
         //Récupération de l'événement
         $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
         //Test si l'événement est ouvert
-        if ($event->getState() != $state = $entityManager->getRepository('App:EventState')->find(2)) {
+        if ($event->getState() == $state = $entityManager->getRepository('App:EventState')->find(2)) {
+
             //Test si la date limite n'est pas dépassé
             if ($event->getLimitDate() > (new DateTime("now"))) {
+
                 //Test si il reste de la place dans l'événement
-                if ($event->getCurrentSubs() <= $event->getNbrPlace()) {
+                if ($event->getCurrentSubs() < $event->getNbrPlace()) {
+
                     //Ajout de l'utilisateur + incrémentation du nombre de participants
-                    $event->addSubscriber( $user = $this->getUser());
+                    $event->addSubscriber($user = $this->getUser());
                     $event->setCurrentSubs($event->getCurrentSubs() + 1);
+
                     //Fermeture des inscriptions si l'événement est complet
                     if ($event->getCurrentSubs() == $event->getNbrPlace()) {
-                        $event->setState($state = $entityManager->getRepository('App:EventState')->find(3));
+                        $event->setState($closed = $entityManager->getRepository('App:EventState')->find(3));
                     }
+
                     $entityManager->flush();
                     $this->addFlash('success', 'Inscription confirmée.');
+
                 } else {
                     $this->addFlash('warning', 'Cet événement est complet. Vous ne pouvez pas vous y inscrire.');
                 }
@@ -168,7 +180,7 @@ class EventController extends AbstractController
         $event->removeSubscriber($user);
         $event->setCurrentSubs($event->getCurrentSubs() - 1);
         if ($event->getCurrentSubs() > $event->getNbrPlace()) {
-            $event->setState($state = $entityManager->getRepository('App:EventState')->find(2));
+            $event->setState($opened = $entityManager->getRepository('App:EventState')->find(2));
         }
         $entityManager->flush();
         $this->addFlash('success', 'Vous n\'êtes plus inscrit à cet événement.');
@@ -199,7 +211,8 @@ class EventController extends AbstractController
      */
     public function delete(EntityManagerInterface $entityManager, Request $request): RedirectResponse
     {
-        $entityManager->remove($event = $entityManager->getRepository(Event::class)->findOneBy(['id' => $request->get('id')]));
+        $event = $entityManager->getRepository(Event::class)->findOneBy(['id' => $request->get('id')]);
+        $event->setState($archive = $entityManager->getRepository('App:EventState')->find(4));
         $entityManager->flush();
         $this->addFlash('success', 'L\'événement a bien été annulé !');
         return $this->redirectToRoute('home_index');

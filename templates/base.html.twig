@@ -27,7 +27,7 @@
                 <h1>Sortir - ENI</h1>
             </div>
             <div class="col-md-5 my-3 offset-md-3" id="menu">
-                <ul class="nav nav-pills">
+                <ul class="nav nav-pills fs-4">
                     {% if app.user.admin == true %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('admin_villes') }}">Villes</a>
@@ -55,8 +55,11 @@
 <!--BODY -->
 {% block body %}{% endblock %}
 
-<footer class="p-5">
-
+{% block footer %}
+<footer class="p-2 mt-5 bg-secondary text-white text-end">
+    <p>Sortir.com par Aurélien SUEL et Hugo RADEPONT</p>
+    <p>ENI-H2DWM-139(A)</p>
 </footer>
+{% endblock %}
 </body>
 </html>

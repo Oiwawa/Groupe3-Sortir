@@ -22,21 +22,57 @@ class EventCreateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['required'=>true, 'label'=> 'Nom de la sortie: '])
-            ->add('limitDate', DateTimeType::class, ['required'=>true,'widget' => 'single_text', 'label'=> 'Date limite d\'inscription: '])
-            ->add('eventDate', DateTimeType::class, ['required'=>true,'widget' => 'single_text',
-                'label'=> 'Date et heure de la sortie: '])
-            ->add('nbrPlace', IntegerType::class, ['required'=>true,'label'=> 'Nombre de places: '])
-            ->add('duration', TimeType::class, ['required'=>true,'widget' => 'single_text', 'label'=> 'Durée: '])
-            ->add('description', TextareaType::class, ['required'=>true,'label'=> 'Description et infos: '])
-            ->add('campus', EntityType::class,['required'=>true,'class'=>Campus::class, 'choice_label'=>'name'])
-            ->add('city', EntityType::class, ['required'=>true,'class'=>Ville::class, 'choice_label'=>'name'])
-            ->add('place', PlaceType::class, ['required'=>true,'label' => ' '])
-            ->add('register', SubmitType::class, ['attr'=>['value'=>1],'label' => 'Enregistrer'])
-            ->add('publish', SubmitType::class, ['attr'=>['value'=>2],'label' => 'Publier la sortie'])
-            ->add('cancel', ResetType::class, ['label' => 'Annuler'])
-
-        ;
+            ->add('name', TextType::class, [
+                'required' => true, 'label' => 'Nom de la sortie: '
+            ])
+            ->add('limitDate', DateTimeType::class, [
+                'required' => true,
+                'widget' => 'single_text',
+                'label' => 'Date limite d\'inscription: '
+            ])
+            ->add('eventDate', DateTimeType::class, [
+                'required' => true,
+                'widget' => 'single_text',
+                'label' => 'Date et heure de la sortie: '
+            ])
+            ->add('nbrPlace', IntegerType::class, [
+                'required' => true,
+                'label' => 'Nombre de places: '
+            ])
+            ->add('duration', TimeType::class, [
+                'required' => true,
+                'widget' => 'single_text',
+                'label' => 'Durée: '
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => true,
+                'label' => 'Description et infos: '
+            ])
+            ->add('campus', EntityType::class, [
+                'required' => true,
+                'class' => Campus::class,
+                'choice_label' => 'name'
+            ])
+            ->add('city', EntityType::class, [
+                'required' => true,
+                'class' => Ville::class,
+                'choice_label' => 'name'
+            ])
+            ->add('place', PlaceType::class, [
+                'required' => true,
+                'label' => ' '
+            ])
+            ->add('register', SubmitType::class, [
+                'attr' => ['value' => 1],
+                'label' => 'Enregistrer'
+            ])
+            ->add('publish', SubmitType::class,
+                ['attr' => ['value' => 2],
+                    'label' => 'Publier la sortie'
+                ])
+            ->add('cancel', ResetType::class, [
+                'label' => 'Annuler'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

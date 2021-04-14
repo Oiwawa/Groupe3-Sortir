@@ -34,8 +34,7 @@ class EventRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('event')
             ->select('event', 'campus')
             ->join('event.campus', 'campus')
-//            ->join('event.organizer', 'organizer')
-//            ->join('event.subscribers', 'subscribers');
+
         ;
 
         if (!empty($filters->text)) {
@@ -43,23 +42,23 @@ class EventRepository extends ServiceEntityRepository
                 ->andWhere('event.name LIKE :text')
                 ->setParameter('text', "%{$filters->text}%");
         }
-//        if (!empty($filters->campus)) {
-//            $query = $query
-//                ->andWhere('campus IN (:campus)')
-//                ->setParameter('campus', $filters->campus);
-//        }
-//        if(!empty($filters->organizer)){
-//            $query = $query
-//                ->andWhere('organizer = :organizer')
-//                ->setParameter('organizer', $user);
-//        }
-//
+        if (!empty($filters->campus)) {
+            $query = $query
+                ->andWhere('campus IN (:campus)')
+                ->setParameter('campus', $filters->campus);
+        }
+        if(!empty($filters->organizer)){
+            $query = $query
+                ->andWhere('event.organizer = :organizer')
+                ->setParameter('organizer', $user);
+        }
+
 //        if(!empty($filters->subscribed)){
 //            $query = $query
-//                ->andWhere('subscribers IN (:user)')
+//                ->andWhere('event.subscribers = :subscribers')
 //                ->setParameter('user', $user);
 //        }
-//
+
         if (!empty($filters->dateStart)) {
             $query = $query
                 ->andWhere('event.eventDate > (:dateStart)')
@@ -69,6 +68,10 @@ class EventRepository extends ServiceEntityRepository
             $query = $query
                 ->andWhere('event.eventDate < (:dateEnd)')
                 ->setParameter('dateEnd', $filters->dateEnd);
+        }
+        if(!empty($filters->passedEvents)){
+            $query = $query
+                ->andWhere('event.state = 4');
         }
         return $query->getQuery()->getResult();
     }

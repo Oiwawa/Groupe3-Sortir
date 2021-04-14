@@ -26,7 +26,7 @@
                             : {{ event.eventDate|format_datetime('full', 'short', locale='fr') }}</p>
                         <p>Date limite d'inscription
                             : {{ event.limitDate|format_datetime('full', 'short', locale='fr') }}</p>
-                        <p>Nombre de places : {{ event.nbrPlace }}</p>
+                        <p>Nombre de places : {{ event.nbrPlace - event.currentSubs }}/{{ event.nbrPlace }}</p>
                         <p>Durée : {{ event.duration|format_time('short', locale='fr') }}</p>
                         <p>Description : {{ event.description }}</p>
                     </div>
