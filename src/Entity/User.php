@@ -49,11 +49,18 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\Regex(pattern="#^
+    (?:(?:\+|00)33|0)
+    \s*[1-9]
+    (?:[\s.-]*\d{2}){4}
+    $#", message="Merci de saisir un numéro valide.")
      */
     private $phone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email(message= "L'email saisie n'est pas valide.")
+     * @Assert\NotBlank(message="Veuillez saisir votre email.")
      */
     private $mail;
 

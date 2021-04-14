@@ -14,6 +14,7 @@ use App\Form\UserProfilType;
 use App\Form\UserRegisterType;
 use App\Form\VilleType;
 use App\Repository\CampusRepository;
+use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -58,7 +59,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($campus);
             $entityManager->flush();
-            return $this->redirectToRoute('admin_campus', ['campustList'=>$campusList]);
+            return $this->redirectToRoute('admin_campus', ['campusList'=>$campusList]);
 
         }
 
@@ -103,7 +104,6 @@ class AdminController extends AbstractController
 
 
     // supprime un campus
-
     /**
      * @Route(Path="campusDelete/{id}" , name="campusDelete")
      * @param EntityManagerInterface $em
@@ -134,28 +134,42 @@ class AdminController extends AbstractController
 
 
     // Ajouter une ville
-
     /**
      * @Route(path="villes", name="villes")
      * @param EntityManagerInterface $entityManager
      * @param Request $request
+     * @param VilleRepository $villeRepository
      * @return Response
      */
-    public function city(EntityManagerInterface $entityManager, Request $request): Response
+    public function city(EntityManagerInterface $entityManager, Request $request, VilleRepository $villeRepository ): Response
     {
-        $villeList = $entityManager->getRepository(Ville::class)->findAll();
-
+       // $villeList = $entityManager->getRepository(Ville::class)->findAll();
         $ville = new ville();
+
+        //Formulaire de recherche
+        $text = new NameFilter();
+        $filter = $this->createForm(NameFilterType::class, $text);
+        $filter->handleRequest($request);
+        //Si le form de filtre est valid et soumis, je fais la recherche
+
+        $villeList = $villeRepository->findName($text);
+
+
         $form = $this->createForm(VilleType::class, $ville);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($ville);
             $entityManager->flush();
-            return $this->redirectToRoute('admin_villes');
+            return $this->redirectToRoute('admin_villes', ['villeList'=>$villeList]);
         }
-        return $this->render('admin/city.html.twig', ['villeForm' => $form->createView(), 'villeList' => $villeList]);
+        return $this->render('admin/city.html.twig',
+            [
+                'filter'=>$filter->createView(),
+                'villeForm' => $form->createView(),
+                'villeList' => $villeList]);
     }
+
 
     /**
      * @Route(Path="modifierville", name="modifierville")
@@ -186,7 +200,6 @@ class AdminController extends AbstractController
 
 
     //Supprimer une ville
-
     /**
      * @Route(Path="deletecity/{id}" , name="deletecity")
      * @param EntityManagerInterface $em
@@ -204,8 +217,8 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_villes');
     }
 
-    //Ajouter un utilisateur
 
+    //Ajouter un utilisateur
     /**
      * @Route(path="userRegister", name="userRegister" )
      * @param EntityManagerInterface $entityManager

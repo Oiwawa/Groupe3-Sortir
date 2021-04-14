@@ -17,12 +17,19 @@
     {% endfor %}
 
     {% form_theme villeForm 'bootstrap_4_layout.html.twig' %}
+    {% form_theme filter 'bootstrap_4_layout.html.twig' %}
     <div class="container">
         <div class="row">
             <div class="col-md-8 col -md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Liste des Villes
+                    <div class="panel-heading">
+                        <h1>Liste des Villes</h1>
                         <div class="panel-body">
+                                {{ form_start(filter) }}
+                                {{ form_row(filter.text) }}
+                                {{ form_row(filter.search) }}
+                                {{ form_end(filter) }}
+
                             <table class="table table-bordered table-stripped">
                                 <thead>
                                 <tr>

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Ville;
+use App\Filters\NameFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,5 +19,17 @@ class VilleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Ville::class);
     }
-    
+    /**
+     * @param NameFilter $villeFilter
+     * @return Ville[]
+     */
+    public function findName(NameFilter $villeFilter): array
+    {
+        $query = $this->createQueryBuilder('ville')
+            ->andWhere('ville.name LIKE :text')
+            ->setParameter('text',"%{$villeFilter->text}%" );
+
+        return $query->getQuery()->getResult();
+    }
+
 }

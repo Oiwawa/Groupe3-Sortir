@@ -14,7 +14,7 @@ class NameFilterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('text', TextType::class, ['label'=> 'Le nom contient'])
+            ->add('text', TextType::class, ['label'=> 'Le nom contient', 'required'=>false])
             ->add('search', SubmitType::class, ['label'=>'Rechercher'])
         ;
     }
