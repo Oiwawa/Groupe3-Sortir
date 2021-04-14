@@ -8,7 +8,7 @@ class CampusFilter
     /**
      * @var string
      */
-    private $text;
+    public $text;
 
 
 

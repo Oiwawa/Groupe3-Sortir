@@ -52,7 +52,7 @@ class AdminController extends AbstractController
         if ($filter->isSubmitted() && $filter->isValid()) {
 
             $campusList = $campusRepository->findName($text);
-            return $this->redirectToRoute('admin_campus', ['campustList'=>$campusList]);
+            return $this->redirectToRoute('admin_campus', ['campusList'=>$campusList]);
 
         }
 
@@ -77,7 +77,6 @@ class AdminController extends AbstractController
 
 
     // modifier le nom d un campus
-
     /**
      * @Route(Path="campusmodifier/{id}" , name="campusmodifier")
      * @param EntityManagerInterface $entityManager
