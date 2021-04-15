@@ -206,15 +206,17 @@ class EventController extends AbstractController
     }
 
     /**
+     * @Route(path="cancel/{id}", name="cancel")
      * @param EntityManagerInterface $entityManager
      * @param Request $request
      * @return Response
-     * @Route(path="cancel/{id}", name="cancel")
      */
     public function cancel(EntityManagerInterface $entityManager, Request $request): Response
     {
+        //Récupération de l'évent
         $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
 
+        //Création du formulaire pour annuler l'événement
         $cancelForm = $this->createForm(EventCancelFormType::class);
         $cancelForm->handleRequest($request);
 
@@ -231,32 +233,13 @@ class EventController extends AbstractController
      */
     public function delete(EntityManagerInterface $entityManager, Request $request): RedirectResponse
     {
+        //Récupération de l'événement
         $event = $entityManager->getRepository(Event::class)->findOneBy(['id' => $request->get('id')]);
+        //Changement de l'état pour "Archivé"
         $event->setState($archive = $entityManager->getRepository('App:EventState')->find(4));
         $entityManager->flush();
+        //Message
         $this->addFlash('success', 'L\'événement a bien été annulé !');
         return $this->redirectToRoute('home_index');
     }
-
-
-    /**
-     * @Route(path="archive/{id}", name="archive")
-     * @param EntityManagerInterface $entityManager
-     * @param Request $request
-     */
-    public function archive(EntityManagerInterface $entityManager, Request $request)
-    {
-        $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
-        $event->setState($state = $entityManager->getRepository('App:EventState')->find(1));
-        $entityManager->flush();
-
-    }
-
-    public function updateList(EntityManagerInterface $entityManager, Request $request)
-    {
-        $event = $entityManager->getRepository('App:Event')->findAll();
-
-
-    }
-
 }

@@ -4,7 +4,6 @@
 
 
 {% block body %}
-
     {% for status, messages in app.flashes %}
         {% for message in messages %}
             <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
@@ -15,23 +14,20 @@
             </div>
         {% endfor %}
     {% endfor %}
-    {% form_theme villeForm 'bootstrap_4_layout.html.twig' %}
-
-    <div class="container-fluid">
+    {% form_theme campusForm 'bootstrap_4_layout.html.twig' %}
+    <div class="container-fluid pt-3">
         <div class="row">
             <div class="d-flex justify-content-center">
-                <h1>Modifier Ville</h1>
+                <h1>Modifier Campus</h1>
             </div>
             <div class="d-flex justify-content-center">
                 <br>
-                {{ form_start(villeForm) }}
+                {{ form_start(campusForm) }}
                 <br>
-                {{ form_row(villeForm.name) }}
-                <br>
-                {{ form_row(villeForm.zipCode) }}
+                {{ form_row(campusForm.name) }}
                 <br>
                 <button class="btn btn-success" type="submit">Modifier</button>
-                {{ form_end(villeForm) }}
+                {{ form_end(campusForm) }}
             </div>
         </div>
     </div>

@@ -94,7 +94,7 @@ class AdminController extends AbstractController
                 , 'campusList' => $campusList]);
 
         }
-        return $this->render("admin/modifiercampus.html.twig", [
+        return $this->render("modifierCampus.html.twig", [
                 'campusForm' => $campusForm->createView()]
         );
 
@@ -179,7 +179,7 @@ class AdminController extends AbstractController
                 'villeForm' => $villeForm->createView()
                 , 'villeList' => $villeList]);
         }
-        return $this->render('admin/modifierville.html.twig', ['villeForm' => $villeForm->createView()]);
+        return $this->render('modifierVille.html.twig', ['villeForm' => $villeForm->createView()]);
     }
 
 

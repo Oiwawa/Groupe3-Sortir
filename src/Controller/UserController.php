@@ -40,12 +40,16 @@ class UserController extends AbstractController
         //Si utilisateur connecté souhaite accéder à son profil
         if ($request->get('username') === $this->getUser()->getUsername()) {
 
+            //Création du formulaire
             $form = $this->createForm(UserProfilType::class, $this->getUser());
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
+                //Encodage du mot de passe
                 $user->setPassword( $passwordEncoder->encodePassword( $user, $form->get('password')->getData()));
+                //Refresh pour ne pas être déconnecté immédiatement
                 $entityManager->refresh($user);
                 $entityManager->flush();
+                //Message
                 $this->addFlash('success', 'Votre profil a été modifié avec succès!');
 
             }
