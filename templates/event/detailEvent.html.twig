@@ -36,9 +36,10 @@
                         {% if event.nbrPlace == 1 %}
                             <p>Nombre de places : {{ event.nbrPlace - event.currentSubs }} place
                                 sur {{ event.nbrPlace }}</p>
+                        {% else %}
+                            <p>Nombre de places : {{ event.nbrPlace - event.currentSubs }} places
+                                sur {{ event.nbrPlace }}</p>
                         {% endif %}
-                        <p>Nombre de places : {{ event.nbrPlace - event.currentSubs }} places
-                            sur {{ event.nbrPlace }}</p>
                         <p>Durée : {{ event.duration|format_time('short', locale='fr') }}</p>
                         <p>Description : {{ event.description }}</p>
                     </div>
@@ -50,52 +51,62 @@
                     </div>
                 </div>
             </div>
-
+            {# Test si event ouvert #}
             {% if event.state.id != 4 %}
             <div>
+                {# Test si user abonné ou pas #}
                 {% if subOrNot is same as(false) %}
-                    <button class="btn btn-outline-primary">
-                        <a style="text-decoration: none; color: black"
-                           href="{{ url('event_subscribe', {'id':event.id}) }}">S'inscrire à la sortie</a>
-                    </button>
+                    {# Test si il reste de la place #}
+                    {% if event.nbrPlace > event.currentSubs %}
+                        <button class="btn btn-outline-primary">
+                            <a style="text-decoration: none; color: black"
+                               href="{{ url('event_subscribe', {'id':event.id}) }}">S'inscrire à la sortie</a>
+                        </button>
+                    {% endif %}
                 {% else %}
                     <button class="btn btn-outline-primary">
                         <a style="text-decoration: none; color: black"
                            href="{{ url('event_unsubscribe', {'id':event.id}) }}">Annuler l'inscription à la
                             sortie</a>
                     </button>
+                    {# Fin test si inscrit #}
                 {% endif %}
             </div>
-            <div>
-                <h3>Liste des participants inscrits: </h3>
-                {% if participants is not empty %}
-                    <table style="width: 20%" class="table table-bordered table-hover">
-                        <caption>Liste des utilisateurs inscrit</caption>
-                        <thead>
+        </div>
+        <div>
+            <h3>Liste des participants inscrits: </h3>
+            {# Test si il y a des inscrits #}
+            {% if participants is not empty %}
+                <table style="width: 20%" class="table table-bordered table-hover">
+                    <caption>Liste des utilisateurs inscrit</caption>
+                    <thead>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Nom</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {# Affichage des participants #}
+                    {% for participant in participants %}
                         <tr>
-                            <th>Pseudo</th>
-                            <th>Nom</th>
+                            <td>{{ participant.username }}</td>
+                            <td> {{ participant.firstName }} {{ participant.lastName|upper }}</td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        {% for participant in participants %}
-                            <tr>
-                                <td>{{ participant.username }}</td>
-                                <td> {{ participant.firstName }} {{ participant.lastName|upper }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                    <br>
-                    <h5>Il n'y a pas encore d'inscrit pour cet événement</h5>
-                {% endif %}
-                {% else %}
-                    <div class="text-center">
-                        <h3>Cet événement a été archivé.</h3>
-                    </div>
-                {% endif %}
-            </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {# Si pas d'inscrit #}
+            {% else %}
+                <br>
+                <h5>Il n'y a pas encore d'inscrit pour cet événement</h5>
+            {% endif %}
+
+            {# Si event pas ouvert #}
+            {% else %}
+                <div class="text-center">
+                    <h3>Cet événement a été archivé.</h3>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

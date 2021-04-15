@@ -78,7 +78,7 @@
                         </tr>
                         </thead>
                         <tbody>
-
+                        {# Affichage des résultats #}
                         {% for event in filtersResults %}
                             <tr>
                                 <td><a href="{{ path('event_detail', {'id': event.id}) }}">{{ event.name }}</a></td>
@@ -91,7 +91,8 @@
                                 {% endif %}
                                 <td>{{ event.state.state }}</td>
 
-                                {% if(event.subscribers.contains(app.user)) %}
+                                {# Si l'utilisateur est inscrit #}
+                                {% if event.subscribers.contains(app.user) %}
                                     <td class="text-center">X</td>
                                 {% else %}
                                     <td></td>
@@ -100,33 +101,36 @@
                                         {{ event.organizer.username }}
                                     </a></td>
                                 <td>
+                                    <!--BOUTONS-->
                                     <a href="{{ path('event_detail', {'id': event.id}) }}">Afficher</a>
                                     {# Si l'utilisateur est l'organisateur: Annulation #}
-                                    {% if(event.organizer is same as app.user) %}
-                                        {% if event.state.id == 4 or event.state.id == 3 %}
-                                        {% else %}
+                                    {% if event.organizer is same as app.user %}
+                                        {# et que l'etat est archivé #}
+                                        {% if event.state.id != 4 %}
                                             <a href="{{ path('event_cancel', {'id': event.id}) }}">Annuler</a>
+                                        {% else %}
+                                            <span></span>
                                         {% endif %}
-                                        {# ET l'évenement est en création #}
-                                        {% if(event.state.id == 1) %}
-
+                                        {# Et l'évenement est en création #}
+                                        {% if event.state.id == 1 %}
                                             <a href="{{ path('event_detail', {'id': event.id}) }}">Publier</a>
-
                                         {% endif %}
-
+                                        {# Si l'user n'est pas l'organisateur #}
                                     {% else %}
+
                                         {# Si l'événement est en statut "Ouvert" #}
-                                        {% if(event.state.id == 2) %}
+                                        {% if event.state.id == 2 %}
                                             {# Que l'utilisateur est inscrit #}
-                                            {% if(event.subscribers.contains(app.user)) %}
-                                                {# et qu'il n'est pas l'organisateur, on affiche "Se désister" #}
+                                            {% if event.subscribers.contains(app.user) %}
+                                                {# on affiche "Se désister" #}
                                                 <a href="{{ path('event_detail', {'id': event.id}) }}">Se
                                                     désister</a>
                                             {% else %}
-                                                {# Si il n'est pas inscrit et que ce n'est pas l'organisateur, "S'inscrire" #}
+                                                {# Si il n'est pas inscrit, on affiche "S'inscrire" #}
                                                 <a href="{{ path('event_detail', {'id': event.id}) }}">S'inscrire</a>
                                             {% endif %}
                                         {% endif %}
+                                        {# Fin du test organisateur #}
                                     {% endif %}
                                 </td>
                             </tr>

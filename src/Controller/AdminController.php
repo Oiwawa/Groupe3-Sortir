@@ -76,10 +76,9 @@ class AdminController extends AbstractController
      * @Route(Path="campusmodifier/{id}" , name="campusmodifier")
      * @param EntityManagerInterface $entityManager
      * @param Request $request
-     * @param $id
      * @return Response
      */
-    public function modifierCampus(EntityManagerInterface $entityManager, Request $request)
+    public function modifierCampus(EntityManagerInterface $entityManager, Request $request): Response
     {
         $campusList = $entityManager->getRepository(Campus::class)->findAll();
         $campus = $entityManager->getRepository(Campus::class)->find($request->get('id'));
@@ -103,18 +102,18 @@ class AdminController extends AbstractController
 
 
     // supprime un campus
+
     /**
      * @Route(Path="campusDelete/{id}" , name="campusDelete")
-     * @param EntityManagerInterface $em
-     * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @param int $id
      * @return RedirectResponse
      */
     public
-    function deleteCampus(EntityManagerInterface $em, Request $request, int $id): RedirectResponse
+    function deleteCampus(EntityManagerInterface $entityManager, int $id): RedirectResponse
     {
-        $em->remove($campus = $em->getRepository(Campus::class)->find($id));
-        $em->flush();
+        $entityManager->remove($campus = $entityManager->getRepository(Campus::class)->find($id));
+        $entityManager->flush();
         $this->addFlash('success', 'le campus a bien été supprimé !');
 
         return $this->redirectToRoute('admin_campus');
@@ -185,18 +184,18 @@ class AdminController extends AbstractController
 
 
     //Supprimer une ville
+
     /**
      * @Route(Path="deletecity/{id}" , name="deletecity")
-     * @param EntityManagerInterface $em
-     * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @param $id
      * @return RedirectResponse
      */
-    public function deleteCity(EntityManagerInterface $em, request $request, $id): RedirectResponse
+    public function deleteCity(EntityManagerInterface $entityManager, $id): RedirectResponse
     {
 
-        $em->remove($ville = $em->getRepository(ville::class)->find($id));
-        $em->flush();
+        $entityManager->remove($ville = $entityManager->getRepository(ville::class)->find($id));
+        $entityManager->flush();
         $this->addFlash('success', 'le campus a bien été supprimé !');
 
         return $this->redirectToRoute('admin_villes');
@@ -229,7 +228,10 @@ class AdminController extends AbstractController
             );
             $entityManager->persist($user);
             $entityManager->flush();
+
             $this->addFlash('success', 'Utilisateur ajouté!');
+
+            return $this->redirectToRoute('admin_userList');
         }
         return $this->render('admin/userRegister.html.twig', ['userRegisterForm' => $form->createView()]);
     }
@@ -237,14 +239,11 @@ class AdminController extends AbstractController
     /**
      * @Route(path="userList", name="userList")
      * @param EntityManagerInterface $entityManager
-     * @param Request $request
      * @return Response
      */
-    public function userList(EntityManagerInterface $entityManager, Request $request)
+    public function userList(EntityManagerInterface $entityManager): Response
     {
-
         $allUser = $entityManager->getRepository('App:User')->findAll();
-
         return $this->render('admin/userList.html.twig', ['allUser' => $allUser]);
     }
 
