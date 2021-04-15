@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title  %}Sortir - ENI - Campus  {% endblock %}
+{% block title %}Sortir - ENI - Campus  {% endblock %}
 
 
 {% block body %}
@@ -15,28 +15,22 @@
             </div>
         {% endfor %}
     {% endfor %}
+    {% form_theme campusForm 'bootstrap_4_layout.html.twig' %}
 
-<h1>Modifier Campus</h1>
     <div class="container-fluid pt-3">
         <div class="row">
-            <div class="col">
-                <h3>Modification d'un Site</h3>
-                <hr>
+            <div class="d-flex justify-content-center">
+                <h1>Modifier Campus</h1>
             </div>
-        </div>
-        {{ form_start(campusForm) }}
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-6 col-lg-4">
+            <div class="d-flex justify-content-center">
+                <br>
+                {{ form_start(campusForm) }}
+                <br>
                 {{ form_row(campusForm.name) }}
-            </div>
-            <div class="col-12 col-md-6 col-lg-4">
-
+                <br>
+                <button class="btn btn-success" type="submit">Modifier</button>
+                {{ form_end(campusForm) }}
             </div>
         </div>
-        <div class="col-6 col-md-4 col-lg-2 text-center">
-            <button class="btn btn-success" type="submit">Modifier</button>
-        </div>
-    </div>
-    {{ form_end(campusForm) }}
     </div>
 {% endblock %}

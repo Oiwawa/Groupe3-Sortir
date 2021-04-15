@@ -4,7 +4,6 @@
 
 
 {% block body %}
-
     {% for status, messages in app.flashes %}
         {% for message in messages %}
             <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
@@ -15,10 +14,8 @@
             </div>
         {% endfor %}
     {% endfor %}
-
     {% form_theme campusForm 'bootstrap_4_layout.html.twig' %}
     {% form_theme filter 'bootstrap_4_layout.html.twig' %}
-
     <div class="container">
         <div class="row">
             <div class="col-md-8 col -md-offset-2">
@@ -30,6 +27,7 @@
                             {{ form_row(filter.text) }}
                             {{ form_row(filter.search) }}
                             {{ form_end(filter) }}
+                            {% if campusList|length > 0 %}
                             <table class="table table-bordered table-stripped">
                                 <thead>
                                 <tr>
@@ -39,13 +37,9 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-
                                 {% for campus in campusList %}
-
                                     <tr>
-
                                         <td>  {{ campus.name }}  </td>
-
                                         <th>
                                             <a href="{{ path('admin_campusmodifier',{"id":campus.id}) }}"
                                                class="btn btn-sm btn-primary ">Modifier</a>
@@ -56,27 +50,27 @@
                                         </th>
                                     </tr>
                                 {% endfor %}
-
                                 <td>
-                                    {{ form_start(campusForm, {'label':false})  }}
+                                    {{ form_start(campusForm, {'label':false}) }}
                                     {{ form_row(campusForm.name) }}
-
                                 </td>
                                 <td>
                                     <button type="submit" class="btn btn-sm btn-primary">
-                                     Ajouter
+                                        Ajouter
                                     </button>
                                     {{ form_end(campusForm) }}
                                 </td>
                                 </tbody>
                             </table>
+                            {% else %}
+                            <p>Aucun résultat ne correspond à votre recherche.</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 

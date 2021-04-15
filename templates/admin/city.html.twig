@@ -25,11 +25,11 @@
                     <div class="panel-heading">
                         <h1>Liste des Villes</h1>
                         <div class="panel-body">
-                                {{ form_start(filter) }}
-                                {{ form_row(filter.text) }}
-                                {{ form_row(filter.search) }}
-                                {{ form_end(filter) }}
-
+                            {{ form_start(filter) }}
+                            {{ form_row(filter.text) }}
+                            {{ form_row(filter.search) }}
+                            {{ form_end(filter) }}
+                            {% if villeList|length > 0 %}
                             <table class="table table-bordered table-stripped">
                                 <thead>
                                 <tr>
@@ -42,10 +42,8 @@
                                 <tbody>
                                 {% for ville in villeList %}
                                     <tr>
-
                                         <td>{{ ville.name }} </td>
                                         <td> {{ ville.zipCode }} </td>
-
                                         <th>
                                             <a href=" {{ path('admin_modifierville',{"id":ville.id}) }}"
                                                class="btn btn-sm btn-primary ">Modifier</a>
@@ -56,10 +54,8 @@
                                         </th>
                                     </tr>
                                 {% endfor %}
-
                                 <td>
                                     {{ form_start(villeForm, {'label':false}) }}
-
                                     {{ form_row(villeForm.name) }}
                                 </td>
                                 <td>
@@ -71,15 +67,15 @@
                                     </button>
                                     {{ form_end(villeForm) }}
                                 </td>
-
-
                                 </tbody>
                             </table>
+                            {% else %}
+                            <p>Aucun résultat ne correspond à votre recherche.</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock %}

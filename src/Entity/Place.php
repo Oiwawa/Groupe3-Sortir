@@ -32,7 +32,7 @@ class Place
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Regex ("#^/[0-9]{5}/g$#", message="Code postal invalide.")
+     * @Assert\Regex ("/^(?:[0-8]\d|9[0-8])\d{3}$/", message="Code postal invalide.")
      */
     private $zipCode;
 

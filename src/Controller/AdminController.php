@@ -40,7 +40,6 @@ class AdminController extends AbstractController
      */
     public function campus(EntityManagerInterface $entityManager, Request $request, CampusRepository $campusRepository): Response
     {
-
         $campus = new campus();
         //recupere list des campus
         //$campusList = $entityManager->getRepository(Campus::class)->findAll();
@@ -59,13 +58,13 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($campus);
             $entityManager->flush();
-            return $this->redirectToRoute('admin_campus', ['campusList'=>$campusList]);
+            return $this->redirectToRoute('admin_campus', ['campusList' => $campusList]);
 
         }
 
         return $this->render('admin/campus.html.twig',
             [
-                'filter'=>$filter->createView(),
+                'filter' => $filter->createView(),
                 'campusForm' => $form->createView(),
                 'campusList' => $campusList
             ]);
@@ -114,24 +113,12 @@ class AdminController extends AbstractController
     public
     function deleteCampus(EntityManagerInterface $em, Request $request, int $id): RedirectResponse
     {
-
-        // $em=$this->getDoctrine()->getManager();
-        //$CampusRepository= $this->getDoctrine()->getRepository(CampusType::class);
-        //$campus = $CampusRepository->find($id);
-        // $campus = new Campus();
-        // $campus = $em->getRepository(Campus::class)->find($id);
-
-        //if($campus = null){
-        // throw $this->createNotFoundException('Site inconnu ou deja supprimé');
-        //}
-
         $em->remove($campus = $em->getRepository(Campus::class)->find($id));
         $em->flush();
         $this->addFlash('success', 'le campus a bien été supprimé !');
 
         return $this->redirectToRoute('admin_campus');
     }
-
 
     // Ajouter une ville
     /**
@@ -141,10 +128,10 @@ class AdminController extends AbstractController
      * @param VilleRepository $villeRepository
      * @return Response
      */
-    public function city(EntityManagerInterface $entityManager, Request $request, VilleRepository $villeRepository ): Response
+    public function city(EntityManagerInterface $entityManager, Request $request, VilleRepository $villeRepository): Response
     {
-       // $villeList = $entityManager->getRepository(Ville::class)->findAll();
-        $ville = new ville();
+        // $villeList = $entityManager->getRepository(Ville::class)->findAll();
+        $city = new Ville();
 
         //Formulaire de recherche
         $text = new NameFilter();
@@ -155,22 +142,22 @@ class AdminController extends AbstractController
         $villeList = $villeRepository->findName($text);
 
 
-        $form = $this->createForm(VilleType::class, $ville);
+        $form = $this->createForm(VilleType::class, $city);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($ville);
+            $entityManager->persist($city);
             $entityManager->flush();
-            return $this->redirectToRoute('admin_villes', ['villeList'=>$villeList]);
+            return $this->redirectToRoute('admin_villes', ['villeList' => $villeList]);
         }
         return $this->render('admin/city.html.twig',
             [
-                'filter'=>$filter->createView(),
+                'filter' => $filter->createView(),
                 'villeForm' => $form->createView(),
                 'villeList' => $villeList]);
     }
 
-
+     //Modifier le nom d'une ville
     /**
      * @Route(Path="modifierville", name="modifierville")
      * @param EntityManagerInterface $entityManager
@@ -194,8 +181,6 @@ class AdminController extends AbstractController
                 , 'villeList' => $villeList]);
         }
         return $this->render('admin/modifierville.html.twig', ['villeForm' => $villeForm->createView()]);
-
-
     }
 
 
@@ -255,11 +240,12 @@ class AdminController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function userList(EntityManagerInterface $entityManager, Request $request){
+    public function userList(EntityManagerInterface $entityManager, Request $request)
+    {
 
         $allUser = $entityManager->getRepository('App:User')->findAll();
 
-        return $this->render('admin/userList.html.twig', ['allUser'=>$allUser]);
+        return $this->render('admin/userList.html.twig', ['allUser' => $allUser]);
     }
 
 }
