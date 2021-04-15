@@ -1,36 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sortir - ENI - Event{% endblock %}
+{% block title %}Sortir - ENI - Organiser une sortie{% endblock %}
 
 {% block body %}
+    {% for status, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="my-5 d-flex justify-content-center">
+                        <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                            <strong>
+                                {{ message }}
+                            </strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
     {% form_theme eventCreateForm 'bootstrap_4_layout.html.twig' %}
     <div class="container-fluid">
-    <h1 class="row d-flex justify-content-center">Créer un événement</h1>
-    <div class="row d-flex justify-content-center">
-        <div class="col-3 my-5">
-            {{ form_start(eventCreateForm) }}
-            {{ form_row(eventCreateForm.name) }}
-            <br>
-            {{ form_row(eventCreateForm.eventDate) }}
-            <br>
-            {{ form_row(eventCreateForm.limitDate) }}
-            <br>
-            {{ form_row(eventCreateForm.nbrPlace) }}
-            <br>
-            {{ form_row(eventCreateForm.duration) }} minutes
-            <br>
-            {{ form_row(eventCreateForm.description) }}
+        <h1 class="row d-flex justify-content-center">Créer un événement</h1>
+        <div class="row d-flex justify-content-center">
+            <div class="col-3 my-5">
+                {{ form_start(eventCreateForm) }}
+                {{ form_row(eventCreateForm.name) }}
+                <br>
+                {{ form_row(eventCreateForm.eventDate) }}
+                <br>
+                {{ form_row(eventCreateForm.limitDate) }}
+                <br>
+                {{ form_row(eventCreateForm.nbrPlace) }}
+                <br>
+                {{ form_row(eventCreateForm.duration) }}
+                <br>
+                {{ form_row(eventCreateForm.description) }}
+            </div>
+            <div class="col-3 my-5">
+                {{ form_row(eventCreateForm.campus) }}
+                <br>
+                {{ form_row(eventCreateForm.city) }}
+                <br>
+                {{ form_row(eventCreateForm.place) }}
+            </div>
         </div>
-        <div class="col-3 my-5">
-            {{ form_row(eventCreateForm.campus) }}
-            <br>
-            {{ form_row(eventCreateForm.city) }}
-            <br>
-            {{ form_row(eventCreateForm.place) }}
-        </div>
-
     </div>
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-4 mx-auto d-flex justify-content-center">
@@ -47,7 +63,4 @@
             </div>
         </div>
     </div>
-
-
-
 {% endblock %}

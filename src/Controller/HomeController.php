@@ -34,14 +34,15 @@ class HomeController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        //Instanciation de Filters et gestion du formulaire
         $filters = new Filters();
         $filtersForm = $this->createForm(FiltersType::class, $filters);
         $filtersForm->handleRequest($request);
+
+        //Recherche des données via le repository Event
+        //avec comme paramètres les filtres renseignés et l'utilisateur connecté
         $filtersResults = $filtersRepository->findSearch($filters, $this->getUser());
 
-//        if (empty($filtersResults)){
-//   $filtersResults = $entityManager->getRepository('App:Event')->findAll();
-//        }
         return $this->render('home/index.html.twig',
             [
                 'filtersForm' => $filtersForm->createView(),

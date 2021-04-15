@@ -9,11 +9,18 @@
         <div class="row">
             {% for status, messages in app.flashes %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
-                        <strong>
-                            {{ message }}
-                        </strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="my-5 d-flex justify-content-center">
+                                <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                                    <strong>
+                                        {{ message }}
+                                    </strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 {% endfor %}
             {% endfor %}
@@ -26,53 +33,69 @@
                             : {{ event.eventDate|format_datetime('full', 'short', locale='fr') }}</p>
                         <p>Date limite d'inscription
                             : {{ event.limitDate|format_datetime('full', 'short', locale='fr') }}</p>
-                        <p>Nombre de places : {{ event.nbrPlace - event.currentSubs }}/{{ event.nbrPlace }}</p>
+                        {% if event.nbrPlace == 1 %}
+                            <p>Nombre de places : {{ event.nbrPlace - event.currentSubs }} place
+                                sur {{ event.nbrPlace }}</p>
+                        {% endif %}
+                        <p>Nombre de places : {{ event.nbrPlace - event.currentSubs }} places
+                            sur {{ event.nbrPlace }}</p>
                         <p>Durée : {{ event.duration|format_time('short', locale='fr') }}</p>
                         <p>Description : {{ event.description }}</p>
                     </div>
                     <div class="col-3 my-5">
-                        <p>Campus :{{ event.campus.name }}</p>
-                        <p>Lieu :{{ event.place.name }}</p>
-                        <p>Rue :{{ event.place.street }}</p>
-                        <p>Code postal :{{ event.place.zipCode }}</p>
+                        <p>Campus : {{ event.campus.name }}</p>
+                        <p>Lieu : {{ event.place.name }}</p>
+                        <p>Rue : {{ event.place.street }}</p>
+                        <p>Code postal : {{ event.place.zipCode }}</p>
                     </div>
                 </div>
             </div>
 
+            {% if event.state.id != 4 %}
             <div>
                 {% if subOrNot is same as(false) %}
                     <button class="btn btn-outline-primary">
-                        <a href="{{ url('event_subscribe', {'id':event.id}) }}">S'inscrire à la sortie</a>
+                        <a style="text-decoration: none; color: black"
+                           href="{{ url('event_subscribe', {'id':event.id}) }}">S'inscrire à la sortie</a>
                     </button>
                 {% else %}
                     <button class="btn btn-outline-primary">
-                        <a href="{{ url('event_unsubscribe', {'id':event.id}) }}">Annuler l'inscription à la
+                        <a style="text-decoration: none; color: black"
+                           href="{{ url('event_unsubscribe', {'id':event.id}) }}">Annuler l'inscription à la
                             sortie</a>
                     </button>
                 {% endif %}
             </div>
             <div>
                 <h3>Liste des participants inscrits: </h3>
-                <table style="width: 20%" class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th>Pseudo</th>
-                        <th>Nom</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for participant in participants %}
+                {% if participants is not empty %}
+                    <table style="width: 20%" class="table table-bordered table-hover">
+                        <caption>Liste des utilisateurs inscrit</caption>
+                        <thead>
                         <tr>
-                            <td>{{ participant.username }}</td>
-
-                            <td> {{ participant.firstName }} {{ participant.lastName|upper }}</td>
-
+                            <th>Pseudo</th>
+                            <th>Nom</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {% for participant in participants %}
+                            <tr>
+                                <td>{{ participant.username }}</td>
+                                <td> {{ participant.firstName }} {{ participant.lastName|upper }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <br>
+                    <h5>Il n'y a pas encore d'inscrit pour cet événement</h5>
+                {% endif %}
+                {% else %}
+                    <div class="text-center">
+                        <h3>Cet événement a été archivé.</h3>
+                    </div>
+                {% endif %}
             </div>
-
         </div>
     </div>
 {% endblock %}

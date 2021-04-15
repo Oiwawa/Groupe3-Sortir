@@ -1,82 +1,84 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Sortir - ENI - {{ event.name }}
+    Sortir - ENI - {{ event.name|capitalize }}
 {% endblock %}
 
 {% block body %}
-    <div class="container-fluid">
-        <div class="row">
-            {% for status, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
-                        <strong>
-                            {{ message }}
-                        </strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-
-            {% form_theme updateEventForm 'bootstrap_4_layout.html.twig' %}
-            <div class="container-fluid">
-                <h1 class="row d-flex justify-content-center">Modifier la sortie</h1>
-                <h1 class="row d-flex justify-content-center">{{ event.name|capitalize }}</h1>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-3 my-5">
-                        {{ form_start(updateEventForm) }}
-                        {{ form_row(updateEventForm.name) }}
-                        <br>
-                        {{ form_row(updateEventForm.eventDate) }}
-                        <br>
-                        {{ form_row(updateEventForm.limitDate) }}
-                        <br>
-                        {{ form_row(updateEventForm.nbrPlace) }}
-                        <br>
-                        {{ form_row(updateEventForm.duration) }}
-                        <br>
-                        {{ form_row(updateEventForm.description) }}
-                    </div>
-                    <div class="col-3 my-5">
-                        {{ form_row(updateEventForm.campus) }}
-                        <br>
-                        {{ form_row(updateEventForm.city) }}
-                        <br>
-                        {{ form_row(updateEventForm.place) }}
-                    </div>
-                </div>
+<!--Message flash -->
+<div class="container-fluid">
+    <div class="row">
+        {% for status, messages in app.flashes %}
+            {% for message in messages %}
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-5 mx-auto d-flex justify-content-center">
-                            <div class="me-4">
-                                {{ form_row(updateEventForm.register) }}
+                        <div class="my-5 d-flex justify-content-center">
+                            <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                                <strong>
+                                    {{ message }}
+                                </strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                             </div>
-                            <div class="me-4">
-                                {{ form_row(updateEventForm.publish) }}
-                            </div>
-                            <div class="me-4">
-                                <button class="btn btn-secondary ms-2" type="button">
-                                    <a style="text-decoration: none; color: white"
-                                       href="{{ url('event_cancel', {'id':event.id}) }}">Supprimer la sortie</a>
-                                </button>
-                            </div>
-                            <div>
-                                {{ form_row(updateEventForm.cancel) }}
-                            </div>
-                            {{ form_end(updateEventForm) }}
                         </div>
                     </div>
-                    {{ form_end(updateEventForm) }}
                 </div>
+            {% endfor %}
+        {% endfor %}
+        {% form_theme updateEventForm 'bootstrap_4_layout.html.twig' %}
+        <!--Formulaire de modification d'une sortie -->
+        <div class="container-fluid">
+            <h1 class="row d-flex justify-content-center">Modifier la sortie</h1>
+            <h1 class="row d-flex justify-content-center">{{ event.name|capitalize }}</h1>
+            <div class="row d-flex justify-content-center">
+                <div class="col-3 my-5">
+                    {{ form_start(updateEventForm) }}
+                    {{ form_row(updateEventForm.name) }}
+                    <br>
+                    {{ form_row(updateEventForm.eventDate) }}
+                    <br>
+                    {{ form_row(updateEventForm.limitDate) }}
+                    <br>
+                    {{ form_row(updateEventForm.nbrPlace) }}
+                    <br>
+                    {{ form_row(updateEventForm.duration) }}
+                    <br>
+                    {{ form_row(updateEventForm.description) }}
+                </div>
+                <div class="col-3 my-5">
+                    {{ form_row(updateEventForm.campus) }}
+                    <br>
+                    {{ form_row(updateEventForm.city) }}
+                    <br>
+                    {{ form_row(updateEventForm.place) }}
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-5 mx-auto d-flex justify-content-center">
+                        <div class="me-4">
+                            {{ form_row(updateEventForm.register) }}
+                        </div>
+                        <div class="me-4">
+                            {{ form_row(updateEventForm.publish) }}
+                        </div>
+                        <div class="me-4">
+                            <button class="btn btn-secondary ms-2" type="button">
+                                <a style="text-decoration: none; color: white"
+                                   href="{{ url('event_cancel', {'id':event.id}) }}">Supprimer la sortie</a>
+                            </button>
+                        </div>
+                        <div>
+                            {{ form_row(updateEventForm.cancel) }}
+                        </div>
+                        {{ form_end(updateEventForm) }}
+                    </div>
+                </div>
+                {{ form_end(updateEventForm) }}
             </div>
         </div>
     </div>
-    <button class="btn btn-outline-dark">
-        <a style="text-decoration: none; color: mediumslateblue" href="{{ url('event_create') }}">Organiser une
-            nouvelle sortie</a>
-    </button>
-    </div>
-
+</div>
 {% endblock %}
 
 

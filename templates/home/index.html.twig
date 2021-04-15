@@ -7,13 +7,13 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="my-5 d-flex justify-content-center">
-                        {# <h1>{{ event.name }}</h1> #}
-                    </div>
-                    <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
-                        <strong>
-                            {{ message }}
-                        </strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                            <strong>
+                                {{ message }}
+                            </strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,9 +53,15 @@
                 {{ form_row(filtersForm.search) }}
                 {{ form_end(filtersForm) }}
             </div>
+            <div class="col-2 position-absolute bottom-50 end-0">
+                <button class="btn btn-outline-danger btn-lg">
+                    <a style="text-decoration: none; color: black" href="{{ url('event_create') }}">Créer un
+                        événement</a>
+                </button>
+            </div>
         </div>
         <div class="mb-3 row">
-            <div class="my-5 d-flex justify-content-center ">
+            <div class="my-4 d-flex justify-content-center ">
                 {% if filtersResults|length > 0 %}
                     <table class="table table-bordered table-hover border-dark text-center">
                         <caption>Liste d'événements</caption>
@@ -113,37 +119,26 @@
                                         {% if(event.state.id == 2) %}
                                             {# Que l'utilisateur est inscrit #}
                                             {% if(event.subscribers.contains(app.user)) %}
-                                                {# et qu'il n'est pas l'organisateur #}
-
+                                                {# et qu'il n'est pas l'organisateur, on affiche "Se désister" #}
                                                 <a href="{{ path('event_detail', {'id': event.id}) }}">Se
                                                     désister</a>
-
-                                                {# Si il n'est pas inscrit et que ce n'est pas l'organisateur #}
                                             {% else %}
-
+                                                {# Si il n'est pas inscrit et que ce n'est pas l'organisateur, "S'inscrire" #}
                                                 <a href="{{ path('event_detail', {'id': event.id}) }}">S'inscrire</a>
-
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
-
                                 </td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 {% else %}
+                    {# Si aucun résultat ne correspond aux filtres renseignés #}
                     <p>Aucun résultat ne correspond à votre recherche.</p>
                 {% endif %}
-
             </div>
         </div>
-    </div>
-
-    <div>
-        <button class="btn btn-outline-primary">
-            <a style="text-decoration: none; color: black" href="{{ url('event_create') }}">Créer un événement</a>
-        </button>
     </div>
 {% endblock %}
 

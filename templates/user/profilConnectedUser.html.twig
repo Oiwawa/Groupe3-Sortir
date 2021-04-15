@@ -4,45 +4,52 @@
 
 {% block body %}
     {% form_theme userProfilForm 'bootstrap_4_layout.html.twig' %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="my-5 d-flex justify-content-center">
-                <h1>Mon profil</h1>
-            </div>
-            {% for status, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
-                        <strong>
-                            {{ message }}
-                        </strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div class="container-fluid">
+    <div class="row">
+        <div class="my-5 d-flex justify-content-center">
+            <h1>Mon profil</h1>
+        </div>
+        {% for status, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="my-5 d-flex justify-content-center">
+                            <div class="alert alert-{{ status }} alert-dismissible fade show" role="alert">
+                                <strong>
+                                    {{ message }}
+                                </strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        </div>
                     </div>
-                {% endfor %}
-            {% endfor %}
-            <div class="my-5 d-flex justify-content-center">
-                <div>
-                    {{ form_start(userProfilForm) }}
-                    {{ form_row(userProfilForm.username) }}
-                    <br>
-                    {{ form_row(userProfilForm.firstName) }}
-                    <br>
-                    {{ form_row(userProfilForm.lastName) }}
-                    <br>
-                    {{ form_row(userProfilForm.phone) }}
-                    <br>
-                    {{ form_row(userProfilForm.mail) }}
-                    <br>
-                    {{ form_row(userProfilForm.password) }}
-                    <br>
-                    {{ form_row(userProfilForm.campus) }}
-                    <br>
-                    <button type="submit" class="btn btn-primary">Modifier</button>
-                    <button type="reset" class="btn btn-secondary">Annuler</button>
-                    <br>
-                    {{ form_end(userProfilForm) }}
                 </div>
+            {% endfor %}
+        {% endfor %}
+        <div class="my-2 d-flex justify-content-center">
+            <div>
+                {{ form_start(userProfilForm) }}
+                {{ form_row(userProfilForm.username) }}
+                <br>
+                {{ form_row(userProfilForm.firstName) }}
+                <br>
+                {{ form_row(userProfilForm.lastName) }}
+                <br>
+                {{ form_row(userProfilForm.phone) }}
+                <br>
+                {{ form_row(userProfilForm.mail) }}
+                <br>
+                {{ form_row(userProfilForm.password) }}
+                <br>
+                {{ form_row(userProfilForm.campus) }}
+                <br>
+                <button type="submit" class="btn btn-primary">Modifier</button>
+                <button type="reset" class="btn btn-secondary">Annuler</button>
+                <br>
+                {{ form_end(userProfilForm) }}
             </div>
         </div>
     </div>
+</div>
 
 {% endblock %}

@@ -41,8 +41,8 @@ class EventController extends AbstractController
         $form = $this->createForm(EventCreateType::class, $event);
 
         if($event->getLimitDate() > $event->getEventDate()
-            && $event->getLimitDate() < (new DateTime("now"))
-            && $event->getEventDate() < (new DateTime("now"))){
+            || $event->getLimitDate() < (new DateTime("now"))
+            || $event->getEventDate() < (new DateTime("now"))){
             $this->addFlash('warning', 'Les dates indiqués ne sont pas valides.');
         }
         $form->handleRequest($request);
@@ -85,7 +85,7 @@ class EventController extends AbstractController
         $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
 
         //Si l'utilisateur est aussi l'organisateur -> affichage du formulaire pour modification
-        if ($this->getUser() === $event->getOrganizer()) {
+        if ($this->getUser() === $event->getOrganizer() && $event->getState()->getId() != 4) {
             //Update l'event si modification
             $updateEventForm = $this->createForm(EventCreateType::class, $event);
             $updateEventForm->handleRequest($request);

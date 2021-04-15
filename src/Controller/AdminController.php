@@ -137,8 +137,8 @@ class AdminController extends AbstractController
         $text = new NameFilter();
         $filter = $this->createForm(NameFilterType::class, $text);
         $filter->handleRequest($request);
-        //Si le form de filtre est valid et soumis, je fais la recherche
 
+        //Si le form de filtre est valid et soumis, je fais la recherche
         $villeList = $villeRepository->findName($text);
 
 

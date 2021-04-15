@@ -23,21 +23,23 @@ class EventCreateType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'required' => true, 'label' => 'Nom de la sortie: '
+                'required' => true, 'label' => 'Nom de la sortie : '
             ])
             ->add('limitDate', DateTimeType::class, [
                 'required' => true,
                 'widget' => 'single_text',
-                'label' => 'Date limite d\'inscription: '
+                'label' => 'Date limite d\'inscription : '
             ])
             ->add('eventDate', DateTimeType::class, [
                 'required' => true,
                 'widget' => 'single_text',
-                'label' => 'Date et heure de la sortie: '
+                'label' => 'Date et heure de la sortie : ',
+                'invalid_message'=>'Le nombre de place doit être supérieur à 0',
             ])
             ->add('nbrPlace', IntegerType::class, [
                 'required' => true,
-                'label' => 'Nombre de places: '
+                'label' => 'Nombre de places : ',
+                'attr'=>['step'=>1, 'min'=>1,"pattern"=>"\d+" ]
             ])
             ->add('duration', TimeType::class, [
                 'required' => true,
@@ -46,7 +48,7 @@ class EventCreateType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'required' => true,
-                'label' => 'Description et infos: '
+                'label' => 'Description et infos : '
             ])
             ->add('campus', EntityType::class, [
                 'required' => true,
