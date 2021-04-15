@@ -40,24 +40,22 @@ class EventController extends AbstractController
         $event->setCurrentSubs(0);
         $form = $this->createForm(EventCreateType::class, $event);
 
-        if($event->getLimitDate() > $event->getEventDate()
-            || $event->getLimitDate() < (new DateTime("now"))
-            || $event->getEventDate() < (new DateTime("now"))){
+        if ($event->getLimitDate() >! $event->getEventDate()) {
             $this->addFlash('warning', 'Les dates indiqués ne sont pas valides.');
         }
         $form->handleRequest($request);
         $message = '';
-        if ($form->get('register')->isClicked()) {
-            $event->setState($state = $entityManager->getRepository('App:EventState')->find(1));
-            $message = 'Votre sortie a bien été enregistré! Vous pouvez toujours la modifier, puis la publier ou la supprimer sur cette page.';
-
-        } elseif ($form->get('publish')->isClicked()) {
-            $event->setState($state = $entityManager->getRepository('App:EventState')->find(2));
-            $message = 'Votre sortie a bien été publié! Vous pouvez la modifier jusqu\'au début de l\'événement.';
-        }
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            if ($form->get('register')->isClicked()) {
+                $event->setState($state = $entityManager->getRepository('App:EventState')->find(1));
+                $message = 'Votre sortie a bien été enregistré! Vous pouvez toujours la modifier, puis la publier ou la supprimer sur cette page.';
+
+            } elseif ($form->get('publish')->isClicked()) {
+                $event->setState($state = $entityManager->getRepository('App:EventState')->find(2));
+                $message = 'Votre sortie a bien été publié! Vous pouvez la modifier jusqu\'au début de l\'événement.';
+            }
             $entityManager->persist($place);
             $entityManager->persist($event);
             $entityManager->flush();
@@ -198,6 +196,8 @@ class EventController extends AbstractController
         $event = $entityManager->getRepository('App:Event')->findOneBy(['id' => $request->get('id')]);
 
         $cancelForm = $this->createForm(EventCancelFormType::class);
+        $cancelForm->handleRequest($request);
+
         return $this->render('event/cancel.html.twig',
             ['cancelForm' => $cancelForm->createView(),
                 'event' => $event]);

@@ -28,20 +28,21 @@ class Event
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\GreaterThan("today", message="La date indiqué ne peut pas être antérieur à la date du jour.")
+     * @Assert\GreaterThan("today", message="La date indiquée ne peut pas être antérieur à la date du jour.")
      */
     private $eventDate;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\GreaterThan("today", message="La date indiqué ne peut pas être antérieur à la date du jour.")
+     * @Assert\GreaterThan("today", message="La date indiquée ne peut pas être antérieur à la date du jour.")
+     * @Assert\LessThan(propertyPath="eventDate", message="La date limite doit être antérieur à la date de l'événement.")
      */
     private $limitDate;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\Positive(message="Le nombre de place doit être supérieur à 0")
-     * @Assert\LessThan(1000, message="Vous ne pouvez pas créer d'évenement avec autant de place")
+     * @Assert\Positive(message="Le nombre de place doit être supérieur à 0.")
+     * @Assert\LessThan(1000, message="Le nombre de place doit être supérieur à 1000.")
      */
     private $nbrPlace;
 

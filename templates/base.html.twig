@@ -9,6 +9,7 @@
     {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
     {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('style/style.css') }}">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
               rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
               crossorigin="anonymous">
@@ -24,7 +25,6 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
                 integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
                 crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="{{ asset('style/style.css') }}">
         <link rel="shortcut icon" type="image/png" href="{{ asset('img/pinte.png') }}"/>
 
     {% endblock %}
@@ -34,41 +34,44 @@
 <body>
 <!--NAVBAR-->
 {% block header %}
-    <div class="container-fluid">
-        <div class="row mb-5">
-            <div class="my-3 d-flex col-md-4">
-                <h1>Sortir - ENI</h1>
-            </div>
-            <div class="col-md-5 my-3 offset-md-3" id="menu">
-                <ul class="nav nav-pills fs-5">
-                    {% if app.user.admin == true %}
-                        <div class="dropdown">
-                            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img alt="admin-icon" src="{{ asset('img/admins.png') }}">
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <!--Darkmode Switch -->
-                                <a class="dropdown-item" href="{{ path('admin_userList') }}">Utilisateurs</a>
-                                <a class="dropdown-item" href="{{ url('admin_campus') }}">Campus</a>
-                                <a class="dropdown-item" href="{{ url('admin_villes') }}">Villes</a>
+    <header>
+
+        <div class="container-fluid">
+            <div class="row mb-5">
+                <div class="my-3 d-flex col-md-4">
+                    <h1>Sortir - ENI</h1>
+                </div>
+                <div class="col-md-5 my-3 offset-md-3" id="menu">
+                    <ul class="nav nav-pills fs-5">
+                        {% if app.user.admin == true %}
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img alt="admin-icon" src="{{ asset('img/admins.png') }}">
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <!--Darkmode Switch -->
+                                    <a class="dropdown-item" href="{{ path('admin_userList') }}">Utilisateurs</a>
+                                    <a class="dropdown-item" href="{{ url('admin_campus') }}">Campus</a>
+                                    <a class="dropdown-item" href="{{ url('admin_villes') }}">Villes</a>
+                                </div>
                             </div>
-                        </div>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('home_index') }}">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('user_profil',{"username":app.user.username}) }}">Mon
-                            profil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('app_logout') }}">Se déconnecter</a>
-                    </li>
-                </ul>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('home_index') }}">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('user_profil',{"username":app.user.username}) }}">Mon
+                                profil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('app_logout') }}">Se déconnecter</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
+    </header>
     <hr>
 {% endblock %}
 

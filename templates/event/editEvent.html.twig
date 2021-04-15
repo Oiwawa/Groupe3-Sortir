@@ -8,6 +8,8 @@
 <!--Message flash -->
 <div class="container-fluid">
     <div class="row">
+            <h1 class="row d-flex justify-content-center">Modifier la sortie</h1>
+            <h1 class="row d-flex justify-content-center">{{ event.name|capitalize }}</h1>
         {% for status, messages in app.flashes %}
             {% for message in messages %}
                 <div class="container-fluid">
@@ -28,8 +30,6 @@
         {% form_theme updateEventForm 'bootstrap_4_layout.html.twig' %}
         <!--Formulaire de modification d'une sortie -->
         <div class="container-fluid">
-            <h1 class="row d-flex justify-content-center">Modifier la sortie</h1>
-            <h1 class="row d-flex justify-content-center">{{ event.name|capitalize }}</h1>
             <div class="row d-flex justify-content-center">
                 <div class="col-3 my-5">
                     {{ form_start(updateEventForm) }}
@@ -69,7 +69,8 @@
                             </button>
                         </div>
                         <div>
-                            {{ form_row(updateEventForm.cancel) }}
+                            <button type="reset" class="btn btn-secondary">Annuler</button>
+
                         </div>
                         {{ form_end(updateEventForm) }}
                     </div>

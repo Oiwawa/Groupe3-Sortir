@@ -4,7 +4,7 @@
 
 {% block body %}
     {% form_theme userProfilForm 'bootstrap_4_layout.html.twig' %}
-<div class="container-fluid">
+    <div class="container-fluid">
     <div class="row">
         <div class="my-5 d-flex justify-content-center">
             <h1>Mon profil</h1>
@@ -26,8 +26,8 @@
                 </div>
             {% endfor %}
         {% endfor %}
-        <div class="my-2 d-flex justify-content-center">
-            <div>
+        <div class="row d-flex justify-content-center">
+            <div class="col-3 my-5">
                 {{ form_start(userProfilForm) }}
                 {{ form_row(userProfilForm.username) }}
                 <br>
@@ -36,20 +36,30 @@
                 {{ form_row(userProfilForm.lastName) }}
                 <br>
                 {{ form_row(userProfilForm.phone) }}
-                <br>
+            </div>
+            <div class="col-3 my-5">
                 {{ form_row(userProfilForm.mail) }}
                 <br>
                 {{ form_row(userProfilForm.password) }}
                 <br>
                 {{ form_row(userProfilForm.campus) }}
                 <br>
-                <button type="submit" class="btn btn-primary">Modifier</button>
-                <button type="reset" class="btn btn-secondary">Annuler</button>
-                <br>
-                {{ form_end(userProfilForm) }}
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-4 mx-auto d-flex justify-content-center">
+                        <div class="me-4">
+                            <button type="submit" class="btn btn-primary">Modifier</button>
+                        </div>
+                        <div class="mb-5">
+                            <button type="reset" class="btn btn-secondary">Annuler</button>
+                        </div>
+                        <br>
+                        {{ form_end(userProfilForm) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

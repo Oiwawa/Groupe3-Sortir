@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,7 +23,7 @@ class UserProfilType extends AbstractType
             ->add('username', TextType::class, ['label' => 'Pseudo: '])
             ->add('firstName', TextType::class, ['label' => 'Prénom: '])
             ->add('lastName', TextType::class, ['label' => 'Nom: '])
-            ->add('phone', TextType::class, ['label' => 'Téléphone: '])
+            ->add('phone', TelType::class, ['label' => 'Téléphone: '])
             ->add('mail', TextType::class, ['label' => 'Email: '])
             ->add('password', RepeatedType::class,
                 ['type' => PasswordType::class,

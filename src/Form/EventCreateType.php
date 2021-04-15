@@ -72,9 +72,11 @@ class EventCreateType extends AbstractType
                 ['attr' => ['value' => 2],
                     'label' => 'Publier la sortie'
                 ])
-            ->add('cancel', ResetType::class, [
-                'label' => 'Annuler'
-            ]);
+//            ->add('cancel', ResetType::class, [
+//                'label' => 'Annuler',
+//                'attr'=>['type'=>'reset']
+//            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
