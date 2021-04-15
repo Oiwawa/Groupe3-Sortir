@@ -249,6 +249,19 @@ class AdminController extends AbstractController
         return $this->render('admin/userRegister.html.twig', ['userRegisterForm' => $form->createView()]);
     }
 
+    /**
+     * @Route(path="userList", name="userList")
+     * @param EntityManagerInterface $entityManager
+     * @param Request $request
+     * @return Response
+     */
+    public function userList(EntityManagerInterface $entityManager, Request $request){
+
+        $allUser = $entityManager->getRepository('App:User')->findAll();
+
+        return $this->render('admin/userList.html.twig', ['allUser'=>$allUser]);
+    }
+
 }
 
 

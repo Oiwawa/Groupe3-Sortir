@@ -39,10 +39,9 @@ class UserController extends AbstractController
         $user = $entityManager->getRepository('App:User')->findOneBy(['username' => $request->get('username')]);
         //Si utilisateur connecté souhaite accéder à son profil
         if ($request->get('username') === $this->getUser()->getUsername()) {
+
             $form = $this->createForm(UserProfilType::class, $this->getUser());
-
             $form->handleRequest($request);
-
             if ($form->isSubmitted() && $form->isValid()) {
                 $user->setPassword( $passwordEncoder->encodePassword( $user, $form->get('password')->getData()));
                 $entityManager->refresh($user);
@@ -52,7 +51,6 @@ class UserController extends AbstractController
             }
             return $this->render('user/profilConnectedUser.html.twig', ['userProfilForm' => $form->createView()]);
         }
-
         //Si l'user souhaite accéder au profil d'un autre utilisateur:
         $user = $entityManager->getRepository('App:User')->findOneBy(['username' => $request->get('username')]);
         return $this->render('user/profil.html.twig', ['user' => $user]);
