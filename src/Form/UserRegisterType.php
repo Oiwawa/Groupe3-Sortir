@@ -38,7 +38,7 @@ class UserRegisterType extends AbstractType
                 'choice_label' => 'name'
             ])
             ->add('admin', CheckboxType::class, [
-                'label' => 'Administrateur: ',
+                'label' => 'Administrateur ',
                 'required' => false
             ])
             ->add('password', PasswordType::class, [

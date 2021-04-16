@@ -119,7 +119,7 @@
                                     {% else %}
 
                                         {# Si l'événement est en statut "Ouvert" #}
-                                        {% if event.state.id == 2 or event.state.id ==3 %}
+                                        {% if event.state.id == 2 or event.state.id ==3 and event.subscribers.contains(app.user) %}
                                             {# Que l'utilisateur est inscrit #}
                                             {% if event.subscribers.contains(app.user) %}
                                                 {# on affiche "Se désister" #}

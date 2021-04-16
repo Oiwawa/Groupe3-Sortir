@@ -48,11 +48,14 @@
                         <p>Lieu : {{ event.place.name }}</p>
                         <p>Rue : {{ event.place.street }}</p>
                         <p>Code postal : {{ event.place.zipCode }}</p>
+                        <p>Organisateur : <a href="{{ path('user_profil', {'username': event.organizer.username}) }}">
+                                {{ event.organizer.username }}
+                            </a></p>
                     </div>
                 </div>
             </div>
             {# Test si event ouvert #}
-            {% if event.state.id != 4 %}
+            {% if event.state.id != 4 and event.state.id != 1 %}
             <div>
                 {# Test si user abonné ou pas #}
                 {% if subOrNot is same as(false) %}

@@ -72,6 +72,7 @@ class AdminController extends AbstractController
 
 
     // modifier le nom d un campus
+
     /**
      * @Route(Path="campusmodifier/{id}" , name="campusmodifier")
      * @param EntityManagerInterface $entityManager
@@ -87,39 +88,38 @@ class AdminController extends AbstractController
 
         if ($campusForm->isSubmitted() && $campusForm->isValid()) {
             $entityManager->flush();
-            $this->addFlash('success', 'le campus a bien été modifié !');
+            $this->addFlash('success', 'Le campus a bien été modifié !');
 
             return $this->redirectToRoute('admin_campus', [
                 'campusForm' => $campusForm->createView()
-                , 'campusList' => $campusList]);
-
+                , 'campusList' => $campusList
+            ]);
         }
-        return $this->render("modifierCampus.html.twig", [
+        return $this->render("admin/modifierCampus.html.twig", [
                 'campusForm' => $campusForm->createView()]
         );
 
     }
 
 
-    // supprime un campus
-
+    // Supprime un campus
     /**
      * @Route(Path="campusDelete/{id}" , name="campusDelete")
      * @param EntityManagerInterface $entityManager
      * @param int $id
      * @return RedirectResponse
      */
-    public
-    function deleteCampus(EntityManagerInterface $entityManager, int $id): RedirectResponse
+    public function deleteCampus(EntityManagerInterface $entityManager, int $id): RedirectResponse
     {
         $entityManager->remove($campus = $entityManager->getRepository(Campus::class)->find($id));
         $entityManager->flush();
-        $this->addFlash('success', 'le campus a bien été supprimé !');
+        $this->addFlash('success', 'Le campus a bien été supprimé !');
 
         return $this->redirectToRoute('admin_campus');
     }
 
     // Ajouter une ville
+
     /**
      * @Route(path="villes", name="villes")
      * @param EntityManagerInterface $entityManager
@@ -129,7 +129,6 @@ class AdminController extends AbstractController
      */
     public function city(EntityManagerInterface $entityManager, Request $request, VilleRepository $villeRepository): Response
     {
-        // $villeList = $entityManager->getRepository(Ville::class)->findAll();
         $city = new Ville();
 
         //Formulaire de recherche
@@ -156,7 +155,8 @@ class AdminController extends AbstractController
                 'villeList' => $villeList]);
     }
 
-     //Modifier le nom d'une ville
+    //Modifier le nom d'une ville
+
     /**
      * @Route(Path="modifierville", name="modifierville")
      * @param EntityManagerInterface $entityManager
@@ -179,7 +179,7 @@ class AdminController extends AbstractController
                 'villeForm' => $villeForm->createView()
                 , 'villeList' => $villeList]);
         }
-        return $this->render('modifierVille.html.twig', ['villeForm' => $villeForm->createView()]);
+        return $this->render('admin/modifierVille.html.twig', ['villeForm' => $villeForm->createView()]);
     }
 
 
@@ -203,6 +203,7 @@ class AdminController extends AbstractController
 
 
     //Ajouter un utilisateur
+
     /**
      * @Route(path="userRegister", name="userRegister" )
      * @param EntityManagerInterface $entityManager
@@ -219,6 +220,8 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($user->getAdmin() == true) {
                 $user->setRoles((array)'ROLE_ADMIN');
+            } else {
+                $user->setRoles(["ROLE_USER"]);
             }
             $user->setPassword(
                 $passwordEncoder->encodePassword(

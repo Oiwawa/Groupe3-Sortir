@@ -36,11 +36,11 @@ class UserFixtures extends Fixture
 
         //Création d'au moins une entité admin
         $user = new User();
-        $user->setUsername('admin');
-        $user->setFirstName('admin');
-        $user->setLastName('admin');
+        $user->setUsername('Gandalf');
+        $user->setFirstName('Gandalf');
+        $user->setLastName('Le Gris');
         $user->setPhone($faker->phoneNumber);
-        $user->setMail($faker->email);
+        $user->setMail("gandalf@laComte.com");
         $user->setRoles(['ROLE_ADMIN']);
         $user->setAdmin(1);
         $user->setPassword($this->encoder->encodePassword($user, 'admin'));
@@ -49,20 +49,6 @@ class UserFixtures extends Fixture
         $manager->persist($user);
 
         //Créer des utilisateurs random
-        for ($i = 0; $i < 10; $i++) {
-            $user = new User();
-            $user->setUsername($faker->userName);
-            $user->setFirstName($faker->firstName);
-            $user->setLastName($faker->lastName);
-            $user->setPhone($faker->phoneNumber);
-            $user->setMail($faker->email);
-            $user->setRoles(['ROLE_USER']);
-            $user->setAdmin(0);
-            $user->setPassword($this->encoder->encodePassword($user, '123456'));
-            $user->setCampus($faker->randomElement($campuss));
-
-            $manager->persist($user);
-        }
         $manager->flush();
     }
 }
