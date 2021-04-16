@@ -40,15 +40,14 @@ class AdminController extends AbstractController
      */
     public function campus(EntityManagerInterface $entityManager, Request $request, CampusRepository $campusRepository): Response
     {
-        $campus = new campus();
-        //recupere list des campus
-        //$campusList = $entityManager->getRepository(Campus::class)->findAll();
+        //Instanciation des objets
+        $campus = new Campus();
 
         //Formulaire de recherche
         $text = new NameFilter();
         $filter = $this->createForm(NameFilterType::class, $text);
         $filter->handleRequest($request);
-        //Si le form de filtre est valid et soumis, je fais la recherche
+
         $campusList = $campusRepository->findName($text);
 
         //Formulaire d'ajout
@@ -58,10 +57,11 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($campus);
             $entityManager->flush();
+
+            //Renvoie vers la page
             return $this->redirectToRoute('admin_campus', ['campusList' => $campusList]);
-
         }
-
+        //Page de création
         return $this->render('admin/campus.html.twig',
             [
                 'filter' => $filter->createView(),
@@ -81,6 +81,7 @@ class AdminController extends AbstractController
      */
     public function modifierCampus(EntityManagerInterface $entityManager, Request $request): Response
     {
+        //Récupère l'id du campus et de liste des campus
         $campusList = $entityManager->getRepository(Campus::class)->findAll();
         $campus = $entityManager->getRepository(Campus::class)->find($request->get('id'));
         $campusForm = $this->createForm(CampusType::class, $campus);
@@ -88,6 +89,7 @@ class AdminController extends AbstractController
 
         if ($campusForm->isSubmitted() && $campusForm->isValid()) {
             $entityManager->flush();
+            //Message personnalisé
             $this->addFlash('success', 'Le campus a bien été modifié !');
 
             return $this->redirectToRoute('admin_campus', [
@@ -119,7 +121,6 @@ class AdminController extends AbstractController
     }
 
     // Ajouter une ville
-
     /**
      * @Route(path="villes", name="villes")
      * @param EntityManagerInterface $entityManager
@@ -129,10 +130,12 @@ class AdminController extends AbstractController
      */
     public function city(EntityManagerInterface $entityManager, Request $request, VilleRepository $villeRepository): Response
     {
+        //Instanciation des objets
         $city = new Ville();
 
         //Formulaire de recherche
         $text = new NameFilter();
+
         $filter = $this->createForm(NameFilterType::class, $text);
         $filter->handleRequest($request);
 
@@ -156,7 +159,6 @@ class AdminController extends AbstractController
     }
 
     //Modifier le nom d'une ville
-
     /**
      * @Route(Path="modifierville", name="modifierville")
      * @param EntityManagerInterface $entityManager
@@ -165,7 +167,7 @@ class AdminController extends AbstractController
      */
     public function modifierVille(EntityManagerInterface $entityManager, Request $request)
     {
-
+        //Récupère l'id des villes et de la liste de ville
         $villeList = $entityManager->getRepository(Ville::class)->findAll();
         $ville = $entityManager->getRepository(Ville::class)->find($request->get('id'));
         $villeForm = $this->createForm(VilleType::class, $ville);
@@ -184,7 +186,6 @@ class AdminController extends AbstractController
 
 
     //Supprimer une ville
-
     /**
      * @Route(Path="deletecity/{id}" , name="deletecity")
      * @param EntityManagerInterface $entityManager
@@ -203,7 +204,6 @@ class AdminController extends AbstractController
 
 
     //Ajouter un utilisateur
-
     /**
      * @Route(path="userRegister", name="userRegister" )
      * @param EntityManagerInterface $entityManager
@@ -213,6 +213,7 @@ class AdminController extends AbstractController
      */
     public function userRegister(EntityManagerInterface $entityManager, Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        //Instanciation des objets
         $user = new User();
 
         $form = $this->createForm(UserRegisterType::class, $user);
